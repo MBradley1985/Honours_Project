@@ -192,6 +192,60 @@ def plot_IHMFraction_vs_smass(df, property_1, property_2, titles, save_filename)
     
     plt.tight_layout()
     save_plot(save_filename)
+
+def plot_IHMFraction_vs_hmass_single(df_list, property_1, property_2, titles, save_filename):
+    plt.figure()
+    
+    colors = plt.cm.RdYlBu_r(np.linspace(0, 1, len(df_list)))
+    
+    for df, color, title in zip(df_list, colors, titles):
+        if 'z = 0.00' in title:
+            color = 'black'  # Set color to black for files with title 'z = 0.00'
+        
+        mean_values, _, median_values, mid_bin_values = calculate_statistics(df, property_1, property_2)
+        df_dilute = dilute_dataframe(df, target_rows)
+        plt.plot(mid_bin_values, mean_values, color=color, label=f"Mean: {title}")
+        plt.scatter(np.log10(df_dilute[property_1] * 1.0e10 / Hubble_h), df_dilute[property_2], alpha=0.1, s=0.8, color=color)
+        
+    plt.xlabel(r'$\log_{10} M_{\mathrm{halo}}\ (M_{\odot})$')
+    plt.ylabel(r'$F_{\mathrm{IHS}}\ (M_{\odot}) \left(\frac{M_{\mathrm{IHS}}}{M_{\mathrm{halo}}} \times f_{\mathrm{cosmic\ baryons}}\right)$')
+        
+    # Create a custom legend with larger symbols
+    leg = plt.legend(loc='upper right', numpoints=1, labelspacing=0.1)
+    leg.draw_frame(False)  # Don't want a box frame
+    for t in leg.get_texts():  # Reduce the size of the text
+        t.set_fontsize('medium')
+      
+    plt.tight_layout()
+    save_plot(save_filename)
+    
+    
+def plot_IHMFraction_vs_smass_single(df_list, property_1, property_2, titles, save_filename):
+    plt.figure()
+    
+    colors = plt.cm.RdYlBu_r(np.linspace(0, 1, len(df_list)))
+    
+    for df, color, title in zip(df_list, colors, titles):
+        if 'z = 0.00' in title:
+            color = 'black'  # Set color to black for files with title 'z = 0.00'
+        
+        mean_values, _, median_values, mid_bin_values = calculate_statistics(df, property_1, property_2)
+        df_dilute = dilute_dataframe(df, target_rows)
+        plt.plot(mid_bin_values, mean_values, color=color, label=f"Mean: {title}")
+        plt.scatter(np.log10(df_dilute[property_1] * 1.0e10 / Hubble_h), df_dilute[property_2], alpha=0.1, s=0.8, color=color)
+
+        
+    plt.xlabel(r'$\log_{10} M_{\mathrm{stellar}}\ (M_{\odot})$')
+    plt.ylabel(r'$F_{\mathrm{IHS}}\ (M_{\odot}) \left(\frac{M_{\mathrm{IHS}}}{M_{\mathrm{halo}}} \times f_{\mathrm{cosmic\ baryons}}\right)$')
+        
+    # Create a custom legend with larger symbols
+    leg = plt.legend(loc='upper right', numpoints=1, labelspacing=0.1)
+    leg.draw_frame(False)  # Don't want a box frame
+    for t in leg.get_texts():  # Reduce the size of the text
+        t.set_fontsize('medium')
+      
+    plt.tight_layout()
+    save_plot(save_filename)
     
 # -------------------------------------------------------------------------
 # -------------------------------------------------------------------------    
@@ -221,7 +275,13 @@ for idx, filename in enumerate(csv_files):
     datasets.append(df_calculated)
     
 print('Intrahalo mass fraction vs. Halo mass')
-plot_IHMFraction_vs_hmass(datasets, columns_to_extract[0], 'IHM_Fraction', titles, 'IHMFraction_vs_hmass_test.png')
+plot_IHMFraction_vs_hmass(datasets, columns_to_extract[0], 'IHM_Fraction', titles, 'IHMFraction_vs_hmass_grid.png')
 
 print('Intrahalo mass fraction vs. Stellar mass')
-plot_IHMFraction_vs_smass(datasets, columns_to_extract[2], 'IHM_Fraction', titles, 'IHMFraction_vs_smass_test.png')
+plot_IHMFraction_vs_smass(datasets, columns_to_extract[2], 'IHM_Fraction', titles, 'IHMFraction_vs_smass_grid.png')
+
+print('Intrahalo mass fraction vs. Halo mass')
+plot_IHMFraction_vs_hmass_single(datasets, columns_to_extract[0], 'IHM_Fraction', titles, 'IHMFraction_vs_hmass_single.png')
+
+print('Intrahalo mass fraction vs. Stellar mass')
+plot_IHMFraction_vs_smass_single(datasets, columns_to_extract[2], 'IHM_Fraction', titles, 'IHMFraction_vs_smass_single.png')

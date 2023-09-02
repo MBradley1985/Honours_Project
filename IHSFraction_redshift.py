@@ -105,9 +105,6 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
 
     plt.plot(redshifts, mean, c ='r', label = 'SAGE (Millenium) Mean', linestyle = '--')
     plt.plot(redshifts, maxx, c ='r', label = 'SAGE (Millenium) Maximum', linestyle = ':')
-    # plt.plot(redshifts, mean, c ='r', label = '')
-    # plt.plot(redshifts, maxx, c ='r', label = '')
-    # plt.fill_between(redshifts, (mean-std), (mean+std), color='red', alpha=0.8)
 
     # Pentagons - Burke, Collins, Stott and Hilton - ICL @ z=1, 2012
     redshifts_1 = [0.9468354430379745, 0.8303797468354429, 0.7949367088607594, 0.8075949367088605,  1.2227848101265821]

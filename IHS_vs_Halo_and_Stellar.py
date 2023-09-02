@@ -45,7 +45,7 @@ def calculate_statistics(df, property_to_bin, property_to_calculate):
     halo = np.log10(np.array(df[property_to_bin]) * 1.0e10 / Hubble_h)
     ihstars = np.log10(np.array(df[property_to_calculate]) * 1.0e10 / Hubble_h)
 
-    mi = 8.5
+    mi = 6.5
     ma = 16.5
     bin_edges = np.arange(mi, ma + binwidth, binwidth)
                    
@@ -197,15 +197,14 @@ def plot_IHM_vs_smass(df, property_1, property_2, titles, save_filename):
 # -------------------------------------------------------------------------
 
 # List of CSV files to process along with corresponding titles
-csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/tao.4358.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4363.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4369.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4370.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4371.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4372.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4373.0.csv']  # Add your CSV filenames here
+csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4404.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4420.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4422.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4423.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4424.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4425.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4426.0.csv']  # Add your CSV filenames here
 titles = ['z = 0.00', 'z = 1.0', 'z = 2.07', 'z = 4.17', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
-
 
 # Initialize lists to store DataFrames for old and new datasets
 datasets = []
@@ -220,10 +219,10 @@ for idx, filename in enumerate(csv_files):
     datasets.append(df_calculated)
     
 print('Intrahalo mass vs. Halo mass')
-plot_IHM_vs_hmass(datasets, columns_to_extract[0], columns_to_extract[1], titles, 'IHM_vs_hmass_test.png')
+plot_IHM_vs_hmass(datasets, columns_to_extract[0], columns_to_extract[1], titles, 'IHM_vs_hmass.png')
 
 print('Intrahalo mass vs. Stellar mass')
-plot_IHM_vs_smass(datasets, columns_to_extract[2], columns_to_extract[1], titles, 'IHM_vs_smass_test.png')
+plot_IHM_vs_smass(datasets, columns_to_extract[2], columns_to_extract[1], titles, 'IHM_vs_smass.png')
     
     
     

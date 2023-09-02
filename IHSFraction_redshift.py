@@ -2,8 +2,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.ticker as ticker
-from scipy.interpolate import interp1d
+from astropy.io import fits
 
 np.seterr(divide='ignore')
 
@@ -73,8 +72,9 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     plt.figure()
     
     colors = plt.cm.RdYlBu_r(np.linspace(0, 1, len(df_list)))
-    redshifts = [0.00, 0.0199, 0.0645, 0.1159, 0.1749, 0.201, 0.2798, 0.3197, 
-                 0.4078, 0.508, 0.827, 1.077, 1.503, 2.07]
+    redshifts = [0.00, 0.0199, 0.0414, 0.0645, 0.0893, 0.1159, 0.1749, 0.2075, 0.2798, 0.3197, 
+                 0.4079, 0.5086, 0.5642, 0.6235, 0.6871, 0.7550, 0.827, 0.905, 1.077, 1.1734, 1.2758, 1.3857,
+                   1.503, 1.6302, 1.766, 1.9126, 2.07]
     mean_values = []
     std_values = []
     max_values = []
@@ -103,8 +103,8 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     print(maxx)
     print(redshifts)
 
-    plt.scatter(redshifts, mean, c ='r', label = 'Millenium Mean', marker = '+', s = 100)
-    plt.scatter(redshifts, maxx, c ='r', label = 'Millenium Maximum', marker = 'x', s = 100)
+    plt.scatter(redshifts, mean, c ='r', label = 'SAGE (Millenium) Mean', marker = '+', s = 100)
+    plt.scatter(redshifts, maxx, c ='r', label = 'SAGE (Millenium) Maximum', marker = 'x', s = 100)
     # plt.plot(redshifts, mean, c ='r', label = '')
     # plt.plot(redshifts, maxx, c ='r', label = '')
     # plt.fill_between(redshifts, (mean-std), (mean+std), color='red', alpha=0.8)
@@ -133,22 +133,33 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
                       23.58490566037740,28.5377358490566,29.716981132075500,32.54716981132080,27.476415094339600,27.594339622641500,
                       26.650943396226400,19.81132075471700,18.867924528301900,15.448113207547200,15.330188679245300,
                       11.320754716981100,9.669811320754720,31.603773584905700]
-    # Lines
-    redshifts_5 = [0.0041887765689384000,0.0041887765689384000,0.03232097155110230,0.03899149201079060,0.0638505744692564,
-                   0.06961788159962060,0.11158001278951100,0.1483129628693150,0.1884111503078090,0.22344588385260700,
-                   0.2632949930335280,0.300011857824682,0.3374917052236000,0.37657783179675700,0.41301832208293100,
-                   0.4534918329232500,0.4738079180624310,0.4963986092465620,0.5120909050484690,0.5438628840205930,
-                   0.5842950913286540,0.6086851724743400,0.6391643198055320,0.6734717658353270,0.6852511464464150,0.7180538868379890,
-                   0.7423543710906230,0.7802893309222420,0.8212791957759790,0.8561923960287580,0.8891269137585800,0.9264607357780210,
-                   0.9647437227640590,1.0030267097501000,1.0413096967361300,1.0795926837221700,1.1178756707082100,1.1561586576942500,
-                   1.1944416446802800,1.2327246316663200,1.2692674828802700,0.24556962025316500,0.5645569620253160]
-    ihs_fraction_5 = [18.07154606914890,16.28979105490860,13.553541970453500,15.958198930670300,12.94292121426360,11.54528672743460,
-                      11.743294595908300,12.753896846912800,13.095066051646600,13.840430563868500,10.748816480659700,10.721990853254400,
-                      10.70827370896970,10.048490405357100,10.63321917977420,11.111419193927700,9.238162151749810,9.963925641397920,
-                      9.083649432747120,9.444010244060510,7.950733914123380,7.671796769577460,8.711805708983250,8.94375014870684,
-                      7.6593266384095300,7.1135750155305,6.652987053157180,7.454703122426600,7.696506103558380,8.107250356728790,
-                      7.138901099342530,6.585194885535120,6.386239610992160,6.695725593614550,6.7988875878220100,6.098859769985660,
-                      5.671474365411880,5.546206229588540,5.40620066602127,5.671474365411880,5.696527992576550,11.910377358490600,8.844339622641510]
+    
+    # Lines (model)
+    redshifts_5 = [0.004011349760203840,0.023056412555524700,0.05248969142102060,0.08192297028651650,0.12001309587715800,
+                   0.1581032214678000,0.19696284454512100,0.23774621133914200,0.2758363369297840,0.31392646252042500,0.3546136421286110,
+                   0.38880818669293700,0.42681174381632700,0.4662869648829930,0.5043770904736340,0.542467216064276,0.5805573416549180,0.6186474672455600,
+                   0.6567375928362010,0.6948277184268430,0.7329178440174850,0.7710079696081270,0.8090980951987680,0.84718822078941,0.8852783463800520,
+                   0.9233684719706940,0.9614585975613350,0.999548723151977,1.0341761100525600,1.0711119894131800,1.1449837481344300,1.183073873725070,
+                   1.2211639993157100,1.2592541249063500,1.2817619263917300,1.1083123425692700]
+    ihs_fraction_5 = [17.035633925701400,15.255522799283600,13.375138908022200,11.340768199977500,11.708336986061200,12.328609312577500,
+                      12.848617042445400,12.722826835652300,11.208443436987300,11.164335182657300,11.105524176883900,11.044875327180100,
+                      10.871015291362500,10.55417099775830,10.091034327292800,9.55438389961052,8.833949078886400,8.635461934401190,9.150058234918420,
+                      8.554596801462770,7.782702350686930,7.51070144898496,7.701837217748510,7.643026211975110,7.326917055943100,6.790266628260850,
+                      6.6579418652707000,6.7755638768175,7.223997795839650,6.9544473527115800,6.15069694047515,5.900750165938210,
+                      5.966912547433290,6.047777680371710,6.011020801763340,5.882352941176470]
+    ihs_fraction_5_upper = [18.85060690943040,16.297065711530500,14.447949671672000,12.730913348946100,12.848617042445400,14.202658768425400,
+                            14.648887274731100,14.773860661999500,13.173361147737800,12.298284887725600,12.632976687942900,12.607305217168800,
+                            12.561096569775500,11.887220461955300,11.170216283234600,9.698470863755350,9.95870956430263,10.123590419774500,
+                            9.023247003719530,8.291417550626820,8.370812408420900,8.436974789915970,7.682233549157370,6.9652293704367000,7.362623738019800,
+                            7.385728061716490,6.192967350874780,6.091885934701760,6.253616200578600,6.280571244891410,8.352941176470590,
+                            7.176470588235300,6.82352941176471,6.588235294117650,9.411764705882360,17.764705882352900]
+    ihs_fraction_5_lower = [13.477568076410900,12.12532335338510,9.511133305781340,9.355896755125310,9.714643890343030,10.286764705882400,
+                            10.192903390864500,9.31178850079526,9.795509023281450,10.201304963117900,9.694060038322330,9.213280066124820,
+                            8.508854908083460,8.385515159864250,7.781068711637670,7.282808801613050,7.296776415484230,7.709188593470180,
+                            6.988753772746070,6.318308306929330,7.069618905684490,7.481295946098260,7.046094503375120,6.706460945033760,
+                            6.363886836403720,6.011020801763340,6.746158373930800,6.43740059362046,5.5905221104835400,5.202369472379120,
+                            5.161936905909910,5.166429413295380,5.404532304725170,5.512352481976410,14.235294117647100,11.294117647058800]
+    
     # Upside Down Triangles
     redshifts_6 = [0.16202531645569600,0.16202531645569600,0.16202531645569600,0.18481012658227800]
     ihs_fraction_6 = [15.212264150943400,12.146226415094300,10.259433962264100,7.311320754716980]
@@ -180,7 +191,8 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     plt.scatter(redshifts_2, ihs_fraction_2, marker = 'o', color = 'gray', edgecolors='black', s = 100)
     plt.scatter(redshifts_3, ihs_fraction_3, marker = 's', color = 'gray', edgecolors='black', s = 100)
     plt.scatter(redshifts_4, ihs_fraction_4, marker = 'X', color = 'gray', edgecolors='black', s = 100)
-    plt.scatter(redshifts_5, ihs_fraction_5, marker = '|', color = 'plum')
+    plt.plot(redshifts_5, ihs_fraction_5, linestyle = '--', color = 'plum')
+    # plt.fill_between(redshifts_5, ihs_fraction_5_upper, ihs_fraction_5_lower, color='purple', alpha=0.3)
     plt.scatter(redshifts_6, ihs_fraction_6, marker = 'v', color = 'gray', edgecolors='black', s = 100)
     plt.scatter(redshifts_7, ihs_fraction_7, marker = 'o', color = 'k', edgecolors='gray', s = 100)
     plt.scatter(redshifts_8, ihs_fraction_8, marker = '*', color = 'gray', edgecolors='black', s = 100)
@@ -208,23 +220,37 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
 # -------------------------------------------------------------------------
 
 # List of CSV files to process along with corresponding titles
-csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/tao.4358.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4391.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4392.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4393.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4394.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4395.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4396.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4397.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4364.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4365.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4366.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4367.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4368.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4369.0.csv']  # Add your CSV filenames here
-titles = ['z = 0.00', 'z = 0.0199', 'z = 0.0645', 'z = 0.1159', 'z = 0.1749', 'z = 0.201',
-            'z = 0.2798', 'z = 0.3197', 'z = 0.4078', 'z = 0.508', 'z = 0.827', 'z = 1.077',
-              'z = 1.503', 'z = 2.07']  # Add corresponding titles
+csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4404.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4406.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4427.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4407.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4428.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4408.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4409.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4410.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4411.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4412.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4413.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4414.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4415.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4416.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4417.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4418.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4419.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4429.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4420.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4430.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4431.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4432.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4421.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4433.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4434.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4435.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4422.0.csv']  # Add your CSV filenames here
+titles = ['z = 0.00', 'z = 0.0199', 'z = 0.0414', 'z = 0.0645', 'z = 0.0893', 'z = 0.1159', 'z = 0.1749', 'z = 0.2075',
+            'z = 0.2798', 'z = 0.3197', 'z = 0.4079', 'z = 0.5086', 'z = 0.5642', 'z = 0.6235',
+              'z = 0.6871', 'z = 0.7550', 'z = 0.827', 'z = 0.905', 'z = 1.077', 'z = 1.1734', 'z = 1.2758', 'z = 1.3857',
+                'z = 1.503', 'z = 1.6302', 'z = 1.766', 'z = 1.9126', 'z = 2.07']  # Add corresponding titles
 
 datasets = []
 

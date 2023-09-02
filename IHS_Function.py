@@ -102,36 +102,35 @@ def process_subsets(data_per_file, datasets, property_1, subset_titles, main_tit
 # -------------------------------------------------------------------------
 # -------------------------------------------------------------------------
 
-# List of CSV files to process along with corresponding titles
-csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/tao.4358.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4359.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4360.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4361.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4362.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4363.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4369.0.csv']  # Add your CSV filenames here
-titles = ['z = 0.00', 'z = 0.011', 'z = 0.0414', 'z = 0.0645', 'z = 0.0893', 'z = 1.0', 'z = 2.07']  # Add corresponding titles
-titles_sub = ['z = 0.00', 'z = 0.011', 'z = 0.0414', 'z = 0.0645', 'z = 0.0893', 'z = 1.0', 'z = 2.07']  # Add corresponding titles
+csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4404.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4406.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4427.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4407.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4428.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4420.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4422.0.csv']  # Add your CSV filenames here
+titles = ['z = 0.00', 'z = 0.0199', 'z = 0.0414', 'z = 0.0645', 'z = 0.0893', 'z = 1.0', 'z = 2.07']  # Add corresponding titles
+titles_sub = ['z = 0.00', 'z = 0.0199', 'z = 0.0414', 'z = 0.0645', 'z = 0.0893', 'z = 1.0', 'z = 2.07']  # Add corresponding titles
 
 # List of CSV files to process along with corresponding titles
-csv_files2 = ['/Users/michaelbradley/Documents/Honours/TAO/tao.4358.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4364.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4365.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4366.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4367.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4368.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4369.0.csv']  # Add your CSV filenames here
+csv_files2 = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4404.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4410.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4414.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4419.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4420.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4421.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4422.0.csv']  # Add your CSV filenames here
 titles2 = ['z = 0.00', 'z = 0.201', 'z = 0.508', 'z = 0.827', 'z = 1.077', 'z = 1.503', 'z = 2.07']  # Add corresponding titles
 titles2_sub = ['z = 0.00', 'z = 0.201', 'z = 0.508', 'z = 0.827', 'z = 1.077', 'z = 1.503', 'z = 2.07']  # Add corresponding titles
 
 # List of CSV files to process along with corresponding titles
-csv_files3 = ['/Users/michaelbradley/Documents/Honours/TAO/tao.4358.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4363.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4369.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4370.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4371.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4372.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/tao.4373.0.csv']  # Add your CSV filenames here
+csv_files3 = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4404.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4420.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4422.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4423.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4424.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4425.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4426.0.csv']  # Add your CSV filenames here
 titles3 = ['z = 0.00', 'z = 1.0', 'z = 2.07', 'z = 4.17', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
 titles3_sub = ['z = 0.00', 'z = 1.0', 'z = 2.07', 'z = 4.17', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
 
@@ -175,6 +174,6 @@ for idx, filename in enumerate(csv_files3):
     mass_range_arrays = [np.array(data) for data in mass_range_data]
     grouped_data_per_file3.append(mass_range_arrays)
 
-process_subsets(grouped_data_per_file, datasets, columns_to_extract[1], titles_sub, titles, 4, 2, 'IHMfunction_test1.png')
-process_subsets(grouped_data_per_file2, datasets2, columns_to_extract[1], titles2_sub, titles2, 4, 2, 'IHMfunction_test2.png')
-process_subsets(grouped_data_per_file3, datasets3, columns_to_extract[1], titles3_sub, titles3, 4, 2, 'IHMfunction_test3.png')
+process_subsets(grouped_data_per_file, datasets, columns_to_extract[1], titles_sub, titles, 4, 2, 'IHMfunction_1.png')
+process_subsets(grouped_data_per_file2, datasets2, columns_to_extract[1], titles2_sub, titles2, 4, 2, 'IHMfunction_2.png')
+process_subsets(grouped_data_per_file3, datasets3, columns_to_extract[1], titles3_sub, titles3, 4, 2, 'IHMfunction_3.png')

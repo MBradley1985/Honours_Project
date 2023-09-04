@@ -1,8 +1,9 @@
+#1 /usr/bin/env python
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from astropy.io import fits
+import csv
 
 np.seterr(divide='ignore')
 
@@ -99,8 +100,8 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     mean = np.array(mean_values) * 100
     std = np.array(std_values)
     maxx = np.array(max_values) * 100
-    print(mean)
-    print(maxx)
+    # print(mean)
+    # print(maxx)
     print(redshifts)
 
     plt.plot(redshifts, mean, c ='r', label = 'SAGE (Millenium) Mean', linestyle = '--')
@@ -134,10 +135,10 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     # Lines (model) - Rudick, Mihos and McBride, Quantity of ICL, 2011
     redshifts_5 = [0.004011349760203840,0.023056412555524700,0.05248969142102060,0.08192297028651650,0.12001309587715800,
                    0.1581032214678000,0.19696284454512100,0.23774621133914200,0.2758363369297840,0.31392646252042500,0.3546136421286110,
-                   0.38880818669293700,0.42681174381632700,0.4662869648829930,0.5043770904736340,0.542467216064276,0.5805573416549180,0.6186474672455600,
-                   0.6567375928362010,0.6948277184268430,0.7329178440174850,0.7710079696081270,0.8090980951987680,0.84718822078941,0.8852783463800520,
-                   0.9233684719706940,0.9614585975613350,0.999548723151977,1.0341761100525600,1.0711119894131800,1.1449837481344300,1.183073873725070,
-                   1.2211639993157100,1.2592541249063500,1.2817619263917300,1.1083123425692700]
+                   0.38880818669293700,0.42681174381632700,0.4662869648829930,0.5043770904736340,0.542467216064276,0.5805573416549180,
+                   0.6186474672455600,0.6567375928362010,0.6948277184268430,0.7329178440174850,0.7710079696081270,0.8090980951987680,
+                   0.84718822078941,0.8852783463800520,0.9233684719706940,0.9614585975613350,0.999548723151977,1.0341761100525600,
+                   1.0711119894131800,1.1449837481344300,1.183073873725070,1.2211639993157100,1.2592541249063500,1.2817619263917300,1.1083123425692700]
     ihs_fraction_5 = [17.035633925701400,15.255522799283600,13.375138908022200,11.340768199977500,11.708336986061200,12.328609312577500,
                       12.848617042445400,12.722826835652300,11.208443436987300,11.164335182657300,11.105524176883900,11.044875327180100,
                       10.871015291362500,10.55417099775830,10.091034327292800,9.55438389961052,8.833949078886400,8.635461934401190,9.150058234918420,
@@ -212,6 +213,91 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     plt.tight_layout()
     save_plot(save_filename)
 
+# def plot_IHMFraction_vs_redshift2(df_list, property_1, property_2, titles, save_filename):
+#     plt.figure()
+    
+#     colors = plt.cm.RdYlBu_r(np.linspace(0, 1, len(df_list)))
+#     redshifts = [0.00, 0.0199, 0.0414, 0.0645, 0.0893, 0.1159, 0.1749, 0.2075, 0.2798, 0.3197, 
+#                  0.4079, 0.5086, 0.5642, 0.6235, 0.6871, 0.7550, 0.827, 0.905, 1.077, 1.1734, 1.2758, 1.3857,
+#                    1.503, 1.6302, 1.766, 1.9126, 2.07]
+#     mean_values = []
+#     std_values = []
+#     max_values = []
+
+#     for df, color, title in zip(df_list, colors, titles):
+        
+#         ihs_frac = np.array(df[property_2])
+#         halo = np.array(np.log10(df[property_1]))
+#         w = np.where((halo >= 14) & (ihs_frac > 0))[0]
+#         hmass = halo[w]
+#         ihs = ihs_frac[w]
+#         # mean_values = []
+        
+#         mean = np.mean(ihs)
+#         mean_values.append(mean)
+#         std = np.std(ihs)
+#         std_values.append(std)
+#         ma = np.max(ihs)
+#         max_values.append(ma)
+#         print(mean, std, ma)
+
+#     mean = np.array(mean_values)
+#     std = np.array(std_values)
+#     maxx = np.array(max_values)
+#     # print(mean)
+#     # print(maxx)
+#     print(redshifts)
+
+#     plt.plot(redshifts, mean, c ='k', label = 'SAGE (Millenium) Mean', linestyle = '--')
+#     plt.plot(redshifts, maxx, c ='k', label = 'SAGE (Millenium) Maximum', linestyle = ':')
+
+#     redshifts_1  = [0.01399,0.04977,0.07049,0.10439,0.14771,0.16466,0.17973,0.20610,
+#                     0.23906,0.28143,0.33280,0.37969,0.41328,0.43911,0.46978,0.51666,
+#                     0.55014,0.56301,0.60265,0.65511,0.69956,0.73063,0.74853,0.78620,
+#                     0.83328,0.88639,0.92557,0.96754,1.01033,1.04440,1.09508,1.14405,
+#                     1.18549,1.22795,1.27542,1.31904,1.34558,1.35876,1.37006,1.38890,
+#                     1.41937,1.46047,1.48307,1.51245,1.55841,1.59984,1.64881,1.68460,
+#                     1.72038,1.77061,1.79949,1.80702,1.82020,1.83715,1.85222,1.86729,
+#                     1.88801,1.91814,1.96146,1.99348]
+#     ihs_1 = [0.07899,0.07444,0.06466,0.05709,0.05802,0.06983,0.07775,0.08507,0.09206,
+#              0.09909,0.10192,0.10311,0.10730,0.11685,0.11836,0.11351,0.11809,0.12474,
+#              0.13488,0.13154,0.12283,0.12956,0.14013,0.14427,0.14177,0.14862,0.15378,
+#              0.15559,0.16523,0.17331,0.17428,0.17372,0.17548,0.17994,0.17402,0.16889,
+#              0.18168,0.18848,0.19727,0.20716,0.21191,0.20989,0.20074,0.19464,0.19916,
+#              0.20546,0.20534,0.20097,0.19207,0.18985,0.19232,0.20099,0.20940,0.21809,
+#              0.22610,0.23543,0.24327,0.25209,0.25698,0.25827]
+#     ihs_1.reverse()
+
+#     redshifts_2 = [0.03094,0.08744,0.13829,0.17596,0.20107,0.24430,0.30592,0.36631,
+#                    0.41328,0.46576,0.52440,0.58484,0.64431,0.70144,0.75418,0.80263,
+#                    0.86449,0.94095,0.99149,1.04649,1.10814,1.16916,1.22953,1.28945,
+#                    1.33239,1.35782,1.37948,1.40396,1.44163,1.49625,1.54145,1.60172,
+#                    1.65069,1.70657,1.75843,1.79158,1.81832,1.83150,1.85787,1.88236,
+#                    1.90308,1.93823,1.98595]
+#     ihs_2 = [0.05451,0.04560,0.04302,0.05548,0.06509,0.07169,0.07676,0.07738,0.08409,
+#              0.09197,0.08813,0.09781,0.10087,0.09786,0.10481,0.11316,0.11081,0.12250,
+#              0.12615,0.13656,0.13816,0.14027,0.14122,0.13971,0.13560,0.14763,0.15616,
+#              0.16608,0.17167,0.16581,0.15990,0.16337,0.16215,0.15066,0.14851,0.14518,
+#              0.15822,0.16717,0.18076,0.19065,0.20066,0.21076,0.21516]
+#     ihs_2.reverse()
+
+#     plt.plot(redshifts_1, ihs_1, c ='r', label = '', linestyle = '--')
+#     plt.plot(redshifts_2, ihs_2, c ='b', label = '', linestyle = '--')
+
+#     # plt.xlim(0, 2.1)
+#     plt.xlabel('Redshift')
+#     plt.ylabel('Intrahalo Stars %')
+
+#     # Create a custom legend with larger symbols
+#     leg = plt.legend(loc='upper right', numpoints=1, labelspacing=0.1)
+#     leg.draw_frame(False)  # Don't want a box frame
+#     for t in leg.get_texts():  # Reduce the size of the text
+#         t.set_fontsize('medium')
+      
+#     plt.tight_layout()
+#     save_plot(save_filename)
+
+
 # -------------------------------------------------------------------------
 # -------------------------------------------------------------------------    
 # -------------------------------------------------------------------------
@@ -259,5 +345,8 @@ for idx, filename in enumerate(csv_files):
     df_calculated = perform_calculations(df_filtered)
     datasets.append(df_calculated)
 
-print('Intrahalo mass fraction vs. Halo mass')
+print('Intrahalo mass fraction vs. Redshift')
 plot_IHMFraction_vs_redshift(datasets, 'halo_mass', 'IHM_Fraction', titles, 'IHMFraction_vs_redshift.png')
+
+# print('Intrahalo mass fraction vs. Redshift')
+# plot_IHMFraction_vs_redshift2(datasets, 'halo_mass', 'IHM_Fraction', titles, 'IHMFraction_vs_redshift2.png')

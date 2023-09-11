@@ -107,22 +107,22 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     plt.plot(redshifts, mean, c ='r', label = 'SAGE (Millenium) Mean', linestyle = '--')
     plt.plot(redshifts, maxx, c ='r', label = 'SAGE (Millenium) Maximum', linestyle = ':')
 
-    # Pentagons - Burke, Collins, Stott and Hilton - ICL @ z=1, 2012
+    # Pentagons - Burke, Collins, Stott and Hilton - ICL @ z=1, 2012, 70
     redshifts_1 = [0.9468354430379745, 0.8303797468354429, 0.7949367088607594, 0.8075949367088605,  1.2227848101265821]
     ihs_fraction_1 = [1.415094339622641, 2.594339622641499, 3.7735849056603783, 1.5330188679245182, 2.3584905660377373]
-    # Circles (gray) - Montes and Trujillo - ICL at the Frontier, 2018
+    # Circles (gray) - Montes and Trujillo - ICL at the Frontier, 2018, 37
     redshifts_2 = [0.5341772151898734, 0.5443037974683542, 0.36708860759493667, 0.39746835443037976, 0.3417721518987341,
                    0.30379746835443033, 0.04810126582278479]
     ihs_fraction_2 = [1.5330188679245182, 0, 1.0613207547169807, 1.5330188679245182, 2.7122641509433976,
                       3.3018867924528266, 8.60849056603773]
-    # Squares - Burke, Hilton and Collins, ICL and CLASH, 2015
+    # Squares - Burke, Hilton and Collins, ICL and CLASH, 2015, 36
     redshifts_3 = [0.4025316455696200,0.3873417721518990,0.39746835443038000,0.33924050632911400,0.3443037974683540,
                    0.3417721518987340,0.2911392405063290,0.2253164556962030,0.2177215189873420,0.21265822784810100,
                    0.19493670886075900,0.17721518987341800]
     ihs_fraction_3 = [2.594339622641500,2.7122641509434000,3.3018867924528300,5.542452830188670,6.014150943396220,
                       7.193396226415100,12.971698113207500,12.500000000000000,16.27358490566040,18.042452830188700,
                       16.863207547169800,23.113207547169800]
-    # Crosses Furnell et al., Growth of ICL in XCS-HSC from 0.1<z<0.5, 2021
+    # Crosses Furnell et al., Growth of ICL in XCS-HSC from 0.1<z<0.5, 2021, 71
     redshifts_4 = [0.1443037974683540,0.12658227848101300,0.12151898734177200,0.08101265822784800,0.2253164556962030,
                    0.21518987341772100,0.2556962025316460,0.3063291139240510,0.260759493670886,0.2936708860759490,0.3215189873417720,
                    0.3417721518987340,0.3721518987341770,0.3367088607594940,0.37721518987341800,0.3291139240506330,0.4962025316455700,
@@ -132,7 +132,7 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
                       26.650943396226400,19.81132075471700,18.867924528301900,15.448113207547200,15.330188679245300,
                       11.320754716981100,9.669811320754720,31.603773584905700]
     
-    # Lines (model) - Rudick, Mihos and McBride, Quantity of ICL, 2011
+    # Lines (model) - Rudick, Mihos and McBride, Quantity of ICL, 2011, 35
     redshifts_5 = [0.004011349760203840,0.023056412555524700,0.05248969142102060,0.08192297028651650,0.12001309587715800,
                    0.1581032214678000,0.19696284454512100,0.23774621133914200,0.2758363369297840,0.31392646252042500,0.3546136421286110,
                    0.38880818669293700,0.42681174381632700,0.4662869648829930,0.5043770904736340,0.542467216064276,0.5805573416549180,
@@ -158,30 +158,30 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
                             6.363886836403720,6.011020801763340,6.746158373930800,6.43740059362046,5.5905221104835400,5.202369472379120,
                             5.161936905909910,5.166429413295380,5.404532304725170,5.512352481976410,14.235294117647100,11.294117647058800]
     
-    # Down Triangles - Feldmeier et al., Deep CCD, 2004
+    # Down Triangles - Feldmeier et al., Deep CCD, 2004, 72
     redshifts_6 = [0.16202531645569600,0.16202531645569600,0.16202531645569600,0.18481012658227800]
     ihs_fraction_6 = [15.212264150943400,12.146226415094300,10.259433962264100,7.311320754716980]
-    # Black Circles - Montes and Trujillo - ICL at the Frontier, 2018
+    # Black Circles - Montes and Trujillo - ICL at the Frontier, 2018,37
     redshifts_7 = [0.30126582278481000,0.38987341772151900,0.3417721518987340,0.5367088607594940,
                    0.5367088607594940,0.36962025316455700,0.043037974683544300]
     ihs_fraction_7 = [7.665094339622630,8.60849056603773,13.089622641509400,6.603773584905650,
                       5.778301886792450,4.834905660377360,10.849056603773600]
-    # Star - Ko and Jee, Existence of ICL at z = 1.24, 2018
+    # Star - Ko and Jee, Existence of ICL at z = 1.24, 2018, 74
     redshifts_8 = [1.2379746835443037]
     ihs_fraction_8 = [9.905660377358487]
-    # Black Diamond - Kluge et al., ICL and host Cluster, 2021
+    # Black Diamond - Kluge et al., ICL and host Cluster, 2021, 10
     redshifts_9 = [0.030379746835442978]
     ihs_fraction_9 = [17.924528301886788]
-    # Plus - Zibetti et al., IGS in z=0.25 clusters, 2005
+    # Plus - Zibetti et al., IGS in z=0.25 clusters, 2005, 73
     redshifts_10 = [0.24303797468354427]
     ihs_fraction_10 = [10.849056603773576]
-    # Triangle - Presotto et al., ICL in CLASH-VLT cluster MACS J1206.2-0947, 2014
+    # Triangle - Presotto et al., ICL in CLASH-VLT cluster MACS J1206.2-0947, 2014, 75
     redshifts_11 = [0.4354430379746834]
     ihs_fraction_11 = [12.264150943396224]
-     # Black Triangle - Presotto et al., ICL in CLASH-VLT cluster MACS J1206.2-0947, 2014
+     # Black Triangle - Presotto et al., ICL in CLASH-VLT cluster MACS J1206.2-0947, 2014, 75
     redshifts_12 = [0.43291139240506316]
     ihs_fraction_12 = [5.542452830188672]
-     # Black Side Triangle - Spavone et al., Fornax Deep Survey, 2020
+     # Black Side Triangle - Spavone et al., Fornax Deep Survey, 2020, 76
     redshifts_13 = [0]
     ihs_fraction_13 = [34.08018867924528]
 

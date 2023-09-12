@@ -58,7 +58,15 @@ def Metallicity_smass(df, property_1, property_2, property_3, titles, save_filen
         Z = np.log10((df[property_2] / df[property_3]) / 0.02) + 9.0
         # print(Z)
 
-        ax.scatter(mass, Z, marker='o', s=1, c='k', alpha=0.5, label='Model galaxies')
+        # overplot Tremonti et al. 2003 (h=0.7)
+        w = np.arange(7.0, 13.0, 0.1)
+        Zobs = -1.492 + 1.847*w - 0.08026*w*w
+
+        if 'z = 0.00' in title:
+            # Conversion from Kroupa IMF to Slapeter IMF to Chabrier IMF
+            ax.plot(np.log10((10**w *1.5 /1.8)), Zobs, 'b', lw=2.0, label='Tremonti et al. 2003')
+
+        ax.scatter(mass, Z, marker='o', s=1, c='gray', alpha=0.5, label='Model galaxies')
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
         ax.set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
         ax.set_xlabel(r'$\log_{10} M_{\mathrm{stellar}}\ (M_{\odot})$')  # and the x-axis labels
@@ -218,12 +226,16 @@ def Metallicity_ihsfraction(df, property_1, property_2, property_3, titles, save
 
 # List of CSV files to process along with corresponding titles
 csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4455.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4456.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4457.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4459.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4460.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4461.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4462.0.csv']  # Add your CSV filenames here
-titles = ['z = 0.00', 'z = 1.0', 'z = 2.07', 'z = 4.17', 'z = 5.288']  # Add corresponding titles
-
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4462.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4463.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4464.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4465.0.csv']  # Add your CSV filenames here
+titles = ['z = 0.00', 'z = 0.508', 'z = 1.0', 'z = 2.07', 'z = 3.06', 'z = 4.17', 'z = 5.288', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
 # Initialize lists to store DataFrames for old and new datasets
 datasets = []
 
@@ -238,6 +250,6 @@ for idx, filename in enumerate(csv_files):
     datasets.append(df_calculated)
 
 Metallicity_smass(datasets, 'Total_Stellar_Mass', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_smass.png')
-Metallicity_hmass(datasets, 'Mvir', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_hmass.png')
-Metallicity_ihs(datasets, 'Intracluster_Stars_Mass', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_ihs.png')
-Metallicity_ihsfraction(datasets, 'IHM_Fraction', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_ihs.png')
+# Metallicity_hmass(datasets, 'Mvir', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_hmass.png')
+# Metallicity_ihs(datasets, 'Intracluster_Stars_Mass', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_ihs.png')
+# Metallicity_ihsfraction(datasets, 'IHM_Fraction', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_ihs.png')

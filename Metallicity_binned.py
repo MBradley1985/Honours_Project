@@ -10,7 +10,7 @@ np.seterr(divide='ignore')
 
 # Define the columns you want to extract and the target number of rows
 columns_to_extract = ['Mvir', 'Intracluster_Stars_Mass', 'Total_Stellar_Mass', 'Galaxy_Classification', 'Metals_IntraCluster_Stars_Mass']  # Change to your desired column names
-target_rows = 10000
+target_rows = 20000
 Hubble_h = 0.73
 
 # -------------------------------------------------------------------------
@@ -139,7 +139,7 @@ def Metallicity_hmass(df, propertytoplot, titles, save_filename):
         ax.xaxis.set_minor_locator(plt.MultipleLocator(0.05))
         ax.yaxis.set_minor_locator(plt.MultipleLocator(0.25))
             
-        ax.axis([11.0, 15.0, 7.0, 9.5])
+        ax.axis([10.5, 15.0, 7.0, 9.5])
         
         leg = ax.legend(loc='lower right')
         leg.draw_frame(False)  # Don't want a box frame
@@ -289,6 +289,19 @@ csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4465.0.csv']  # Add your CSV filenames here
 titles = ['z = 0.00', 'z = 0.508', 'z = 1.0', 'z = 2.07', 'z = 3.06', 'z = 4.17', 'z = 5.288', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
 
+# # List of CSV files to process along with corresponding titles
+# csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/tao.4466.0.csv',
+#              '/Users/michaelbradley/Documents/Honours/TAO/tao.4467.0.csv',
+#              '/Users/michaelbradley/Documents/Honours/TAO/tao.4468.0.csv',
+#              '/Users/michaelbradley/Documents/Honours/TAO/tao.4470.0.csv',
+#              '/Users/michaelbradley/Documents/Honours/TAO/tao.4471.0.csv',
+#              '/Users/michaelbradley/Documents/Honours/TAO/tao.4472.0.csv',
+#              '/Users/michaelbradley/Documents/Honours/TAO/tao.4473.0.csv',
+#              '/Users/michaelbradley/Documents/Honours/TAO/tao.4474.0.csv',
+#              '/Users/michaelbradley/Documents/Honours/TAO/tao.4475.0.csv',
+#              '/Users/michaelbradley/Documents/Honours/TAO/tao.4476.0.csv']  # Add your CSV filenames here
+# titles = ['z = 0.00', 'z = 0.508', 'z = 1.0', 'z = 2.07', 'z = 3.06', 'z = 4.17', 'z = 5.288', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
+
 # Initialize lists to store DataFrames for old and new datasets
 datasets = []
 
@@ -302,7 +315,7 @@ for idx, filename in enumerate(csv_files):
     df_calculated = perform_calculations(df_diluted)
     datasets.append(df_calculated)
 
-Metallicity_ihs(datasets, 'IHM', titles, 'Metallicity_ihs.png')
-Metallicity_hmass(datasets, 'hmass', titles, 'Metallicity_hmass.png')
+# Metallicity_ihs(datasets, 'IHM', titles, 'Metallicity_ihs.png')
+# Metallicity_hmass(datasets, 'hmass', titles, 'Metallicity_hmass.png')
 Metallicity_smass(datasets, 'smass', titles, 'Metallicity_smass.png')
-Metallicity_ihsfraction(datasets, 'IHM_Fraction', titles, 'Metallicity_ihsfraction.png')
+# Metallicity_ihsfraction(datasets, 'IHM_Fraction', titles, 'Metallicity_ihsfraction.png')

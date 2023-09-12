@@ -468,22 +468,22 @@ def Metallicity_all(save_filename):
     # Create a 2x2 grid of subplots
     fig, axs = plt.subplots(2, 2, figsize=(10, 6))
     
-    axs[0, 0].scatter(np.log10(df_calculated['hmass']),df_calculated['metallicity'],s=1,c='gray')
+    axs[0, 0].scatter(np.log10(df_calculated['hmass']),df_calculated['metallicity'],s=1,c='gray',alpha=0.5)
     # axs[0, 0].set_title('Plot 1: sin(x)')
     axs[0, 0].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
     axs[0, 0].set_xlabel(r'$\log_{10} M_{\mathrm{halo}}\ (M_{\odot})$')  # and the x-axis labels
     
-    axs[0, 1].scatter(np.log10(df_calculated['smass']),df_calculated['metallicity'],s=1,c='gray')
+    axs[0, 1].scatter(np.log10(df_calculated['smass']),df_calculated['metallicity'],s=1,c='gray',alpha=0.5)
     # axs[0, 1].set_title('Plot 2: cos(x)')
     axs[0, 1].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
     axs[0, 1].set_xlabel(r'$\log_{10} M_{\mathrm{stellar}}\ (M_{\odot})$')  # and the x-axis labels
     
-    axs[1, 0].scatter(np.log10(df_calculated['IHM']),df_calculated['metallicity'],s=1,c='gray')
+    axs[1, 0].scatter(np.log10(df_calculated['IHM']),df_calculated['metallicity'],s=1,c='gray',alpha=0.5)
     # axs[1, 0].set_title('Plot 3: tan(x)')
     axs[1, 0].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
     axs[1, 0].set_xlabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$')  # and the x-axis labels
     
-    axs[1, 1].scatter(df_calculated['IHM_Fraction'],df_calculated['metallicity'],s=1,c='gray')
+    axs[1, 1].scatter(df_calculated['IHM_Fraction'],df_calculated['metallicity'],s=1,c='gray',alpha=0.5)
     # axs[1, 1].set_title('Plot 4: exp(x)')
     axs[1, 1].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
     axs[1, 1].set_xlabel('Intrahalo Stars Fraction')  # and the x-axis labels

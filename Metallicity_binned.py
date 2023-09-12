@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.ticker as ticker
+from matplotlib.lines import Line2D
 
 np.seterr(divide='ignore')
 
@@ -27,6 +28,10 @@ def perform_calculations(df):
     
     df = df.copy ()
     df.loc[:, 'IHM_Fraction'] = df['Intracluster_Stars_Mass'] / (0.17 * df['Mvir'])  # Modify this calculation as needed
+    df.loc[:, 'Metallicity'] = np.log10((df['Metals_IntraCluster_Stars_Mass'] / df['Intracluster_Stars_Mass']) / 0.02) + 9.0
+    df.loc[:, 'IHM'] = df['Intracluster_Stars_Mass'] * 1.0e10 / Hubble_h
+    df.loc[:, 'hmass'] = df['Mvir'] * 1.0e10 / Hubble_h
+    df.loc[:, 'smass'] = df['Total_Stellar_Mass'] * 1.0e10 / Hubble_h
     return df
 
 # Function to save the plot with higher quality
@@ -40,7 +45,7 @@ def save_plot(save_filename):
 
 # -------------------------------------------------------------------------
 
-def Metallicity_smass(df, property_1, property_2, property_3, titles, save_filename):
+def Metallicity_ihs(df, propertytoplot, titles, save_filename):
     num_plots = len(df)
     num_cols = 2
     num_rows = (num_plots + num_cols - 1) // num_cols
@@ -52,22 +57,34 @@ def Metallicity_smass(df, property_1, property_2, property_3, titles, save_filen
         row = idx // num_cols
         col = idx % num_cols
         ax = axs[row, col]
-        
-        mass = np.log10(df[property_1] * 1.0e10 / Hubble_h)
-        # print(mass)
-        Z = np.log10((df[property_2] / df[property_3]) / 0.02) + 9.0
-        # print(Z)
 
-        ax.scatter(mass, Z, marker='o', s=1, c='k', alpha=0.5, label='Model galaxies')
+        metals = np.array((df['Metallicity']))
+        halo = np.array(np.log10(df['hmass']))
+        property_to_plot = np.array(np.log10(df[propertytoplot]))
+
+        w = np.where((halo >= 10.5) & (halo < 12.0) & (metals > 0))[0]
+        metals_1 = metals[w]
+        property_to_plot_1 = property_to_plot[w]
+        w1 = np.where((halo >= 12.01) & (halo < 13.5) & (metals > 0))[0]
+        metals_2 = metals[w1]
+        property_to_plot_2 = property_to_plot[w1]
+        w2 = np.where((halo >= 13.51) & (halo < 17.5) & (metals > 0))[0]
+        metals_3 = metals[w2]
+        property_to_plot_3 = property_to_plot[w2]
+
+        ax.scatter(property_to_plot_1, metals_1, marker='o', s=1, c='r', alpha=0.5, label=r'$10^{10.5} < M_{\mathrm{halo}} < 10^{12.0}$')
+        ax.scatter(property_to_plot_2, metals_2, marker='o', s=1, c='g', alpha=0.5, label=r'$10^{12} < M_{\mathrm{halo}} < 10^{13.5}$')
+        ax.scatter(property_to_plot_3, metals_3, marker='o', s=1, c='b', alpha=0.5, label=r'$10^{13.5} > M_{\mathrm{halo}}$')
+
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
         ax.set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
-        ax.set_xlabel(r'$\log_{10} M_{\mathrm{stellar}}\ (M_{\odot})$')  # and the x-axis labels
+        ax.set_xlabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$')  # and the x-axis labels
             
         # Set the x and y axis minor ticks
         ax.xaxis.set_minor_locator(plt.MultipleLocator(0.05))
         ax.yaxis.set_minor_locator(plt.MultipleLocator(0.25))
             
-        ax.axis([7.5, 12.0, 5.0, 9.5])
+        ax.axis([7.5, 12.0, 7.0, 9.5])
         
         leg = ax.legend(loc='lower right')
         leg.draw_frame(False)  # Don't want a box frame
@@ -83,7 +100,7 @@ def Metallicity_smass(df, property_1, property_2, property_3, titles, save_filen
     plt.tight_layout()
     save_plot(save_filename)
 
-def Metallicity_hmass(df, property_1, property_2, property_3, titles, save_filename):
+def Metallicity_hmass(df, propertytoplot, titles, save_filename):
     num_plots = len(df)
     num_cols = 2
     num_rows = (num_plots + num_cols - 1) // num_cols
@@ -95,13 +112,25 @@ def Metallicity_hmass(df, property_1, property_2, property_3, titles, save_filen
         row = idx // num_cols
         col = idx % num_cols
         ax = axs[row, col]
-        
-        mass = np.log10(df[property_1] * 1.0e10 / Hubble_h)
-        # print(mass)
-        Z = np.log10((df[property_2] / df[property_3]) / 0.02) + 9.0
-        # print(Z)
 
-        ax.scatter(mass, Z, marker='o', s=1, c='k', alpha=0.5, label='Model galaxies')
+        metals = np.array((df['Metallicity']))
+        halo = np.array(np.log10(df['hmass']))
+        property_to_plot = np.array(np.log10(df[propertytoplot]))
+
+        w = np.where((halo >= 10.5) & (halo < 12.0) & (metals > 0))[0]
+        metals_1 = metals[w]
+        property_to_plot_1 = property_to_plot[w]
+        w1 = np.where((halo >= 12.01) & (halo < 13.5) & (metals > 0))[0]
+        metals_2 = metals[w1]
+        property_to_plot_2 = property_to_plot[w1]
+        w2 = np.where((halo >= 13.51) & (halo < 17.5) & (metals > 0))[0]
+        metals_3 = metals[w2]
+        property_to_plot_3 = property_to_plot[w2]
+
+        ax.scatter(property_to_plot_1, metals_1, marker='o', s=1, c='r', alpha=0.5, label=r'$10^{10.5} < M_{\mathrm{halo}} < 10^{12.0}$')
+        ax.scatter(property_to_plot_2, metals_2, marker='o', s=1, c='g', alpha=0.5, label=r'$10^{12} < M_{\mathrm{halo}} < 10^{13.5}$')
+        ax.scatter(property_to_plot_3, metals_3, marker='o', s=1, c='b', alpha=0.5, label=r'$10^{13.5} > M_{\mathrm{halo}}$')
+
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
         ax.set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
         ax.set_xlabel(r'$\log_{10} M_{\mathrm{halo}}\ (M_{\odot})$')  # and the x-axis labels
@@ -110,7 +139,7 @@ def Metallicity_hmass(df, property_1, property_2, property_3, titles, save_filen
         ax.xaxis.set_minor_locator(plt.MultipleLocator(0.05))
         ax.yaxis.set_minor_locator(plt.MultipleLocator(0.25))
             
-        ax.axis([11.0, 15.5, 5.0, 9.5])
+        ax.axis([11.0, 15.0, 7.0, 9.5])
         
         leg = ax.legend(loc='lower right')
         leg.draw_frame(False)  # Don't want a box frame
@@ -124,10 +153,9 @@ def Metallicity_hmass(df, property_1, property_2, property_3, titles, save_filen
         axs[row, col].axis('off')
 
     plt.tight_layout()
-    save_plot(save_filename)          
-    
+    save_plot(save_filename)
 
-def Metallicity_ihs(df, property_1, property_2, property_3, titles, save_filename):
+def Metallicity_smass(df, propertytoplot, titles, save_filename):
     num_plots = len(df)
     num_cols = 2
     num_rows = (num_plots + num_cols - 1) // num_cols
@@ -139,22 +167,34 @@ def Metallicity_ihs(df, property_1, property_2, property_3, titles, save_filenam
         row = idx // num_cols
         col = idx % num_cols
         ax = axs[row, col]
-        
-        mass = np.log10(df[property_1] * 1.0e10 / Hubble_h)
-        # print(mass)
-        Z = np.log10((df[property_2] / df[property_3]) / 0.02) + 9.0
-        # print(Z)
 
-        ax.scatter(mass, Z, marker='o', s=1, c='k', alpha=0.5, label='Model galaxies')
+        metals = np.array((df['Metallicity']))
+        halo = np.array(np.log10(df['hmass']))
+        property_to_plot = np.array(np.log10(df[propertytoplot]))
+
+        w = np.where((halo >= 10.5) & (halo < 12.0) & (metals > 0))[0]
+        metals_1 = metals[w]
+        property_to_plot_1 = property_to_plot[w]
+        w1 = np.where((halo >= 12.01) & (halo < 13.5) & (metals > 0))[0]
+        metals_2 = metals[w1]
+        property_to_plot_2 = property_to_plot[w1]
+        w2 = np.where((halo >= 13.51) & (halo < 17.5) & (metals > 0))[0]
+        metals_3 = metals[w2]
+        property_to_plot_3 = property_to_plot[w2]
+
+        ax.scatter(property_to_plot_1, metals_1, marker='o', s=1, c='r', alpha=0.5, label=r'$10^{10.5} < M_{\mathrm{halo}} < 10^{12.0}$')
+        ax.scatter(property_to_plot_2, metals_2, marker='o', s=1, c='g', alpha=0.5, label=r'$10^{12} < M_{\mathrm{halo}} < 10^{13.5}$')
+        ax.scatter(property_to_plot_3, metals_3, marker='o', s=1, c='b', alpha=0.5, label=r'$10^{13.5} > M_{\mathrm{halo}}$')
+
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
         ax.set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
-        ax.set_xlabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$')  # and the x-axis labels
+        ax.set_xlabel(r'$\log_{10} M_{\mathrm{stellar}}\ (M_{\odot})$')  # and the x-axis labels
             
         # Set the x and y axis minor ticks
         ax.xaxis.set_minor_locator(plt.MultipleLocator(0.05))
         ax.yaxis.set_minor_locator(plt.MultipleLocator(0.25))
             
-        ax.axis([7.5, 12.0, 5.0, 9.5])
+        ax.axis([7.5, 12.0, 7.0, 9.5])
         
         leg = ax.legend(loc='lower right')
         leg.draw_frame(False)  # Don't want a box frame
@@ -168,9 +208,9 @@ def Metallicity_ihs(df, property_1, property_2, property_3, titles, save_filenam
         axs[row, col].axis('off')
 
     plt.tight_layout()
-    save_plot(save_filename)  
+    save_plot(save_filename)
 
-def Metallicity_ihsfraction(df, property_1, property_2, property_3, titles, save_filename):
+def Metallicity_ihsfraction(df, propertytoplot, titles, save_filename):
     num_plots = len(df)
     num_cols = 2
     num_rows = (num_plots + num_cols - 1) // num_cols
@@ -182,22 +222,34 @@ def Metallicity_ihsfraction(df, property_1, property_2, property_3, titles, save
         row = idx // num_cols
         col = idx % num_cols
         ax = axs[row, col]
-        
-        mass = df[property_1]
-        # print(mass)
-        Z = np.log10((df[property_2] / df[property_3]) / 0.02) + 9.0
-        # print(Z)
 
-        ax.scatter(mass, Z, marker='o', s=1, c='k', alpha=0.5, label='Model galaxies')
+        metals = np.array((df['Metallicity']))
+        halo = np.array(np.log10(df['hmass']))
+        property_to_plot = np.array((df[propertytoplot]))
+
+        w = np.where((halo >= 10.5) & (halo < 12.0) & (metals > 0))[0]
+        metals_1 = metals[w]
+        property_to_plot_1 = property_to_plot[w]
+        w1 = np.where((halo >= 12.01) & (halo < 13.5) & (metals > 0))[0]
+        metals_2 = metals[w1]
+        property_to_plot_2 = property_to_plot[w1]
+        w2 = np.where((halo >= 13.51) & (halo < 17.5) & (metals > 0))[0]
+        metals_3 = metals[w2]
+        property_to_plot_3 = property_to_plot[w2]
+
+        ax.scatter(property_to_plot_1, metals_1, marker='o', s=1, c='r', alpha=0.5, label=r'$10^{10.5} < M_{\mathrm{halo}} < 10^{12.0}$')
+        ax.scatter(property_to_plot_2, metals_2, marker='o', s=1, c='g', alpha=0.5, label=r'$10^{12} < M_{\mathrm{halo}} < 10^{13.5}$')
+        ax.scatter(property_to_plot_3, metals_3, marker='o', s=1, c='b', alpha=0.5, label=r'$10^{13.5} > M_{\mathrm{halo}}$')
+
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
         ax.set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
-        ax.set_xlabel(r'IHS Fraction')  # and the x-axis labels
+        ax.set_xlabel('Intrahalo Mass Fraction')  # and the x-axis labels
             
         # Set the x and y axis minor ticks
         ax.xaxis.set_minor_locator(plt.MultipleLocator(0.05))
         ax.yaxis.set_minor_locator(plt.MultipleLocator(0.25))
             
-        ax.axis([0, 0.15, 5.0, 9.5])
+        ax.axis([0, 0.1, 7.0, 9.5])
         
         leg = ax.legend(loc='lower right')
         leg.draw_frame(False)  # Don't want a box frame
@@ -211,7 +263,8 @@ def Metallicity_ihsfraction(df, property_1, property_2, property_3, titles, save
         axs[row, col].axis('off')
 
     plt.tight_layout()
-    save_plot(save_filename)           
+    save_plot(save_filename)
+
 # -------------------------------------------------------------------------
 # -------------------------------------------------------------------------    
 # -------------------------------------------------------------------------
@@ -237,7 +290,7 @@ for idx, filename in enumerate(csv_files):
     df_calculated = perform_calculations(df_diluted)
     datasets.append(df_calculated)
 
-Metallicity_smass(datasets, 'Total_Stellar_Mass', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_smass.png')
-Metallicity_hmass(datasets, 'Mvir', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_hmass.png')
-Metallicity_ihs(datasets, 'Intracluster_Stars_Mass', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_ihs.png')
-Metallicity_ihsfraction(datasets, 'IHM_Fraction', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_ihs.png')
+Metallicity_ihs(datasets, 'IHM', titles, 'Metallicity_ihs.png')
+Metallicity_hmass(datasets, 'hmass', titles, 'Metallicity_hmass.png')
+Metallicity_smass(datasets, 'smass', titles, 'Metallicity_smass.png')
+Metallicity_ihsfraction(datasets, 'IHM_Fraction', titles, 'Metallicity_ihsfraction.png')

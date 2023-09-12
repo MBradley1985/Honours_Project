@@ -219,7 +219,11 @@ def Metallicity_ihsfraction(df, property_1, property_2, property_3, titles, save
         axs[row, col].axis('off')
 
     plt.tight_layout()
-    save_plot(save_filename)           
+    save_plot(save_filename)       
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 # -------------------------------------------------------------------------
 # -------------------------------------------------------------------------    
 # -------------------------------------------------------------------------

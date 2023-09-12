@@ -37,7 +37,7 @@ def perform_calculations_2(df):
 
     df = df.copy ()
     df.loc[:, 'IHM_Fraction'] = df['Intracluster_Stars_Mass'] / (0.17 * df['Mvir'])  # Modify this calculation as needed
-    df.loc[:, 'Metallicity'] = np.log10((df['Metals_IntraCluster_Stars_Mass'] / df['Intracluster_Stars_Mass']) / 0.02) + 9.0
+    df.loc[:, 'metallicity'] = np.log10((df['Metals_IntraCluster_Stars_Mass'] / df['Intracluster_Stars_Mass']) / 0.02) + 9.0
     df.loc[:, 'IHM'] = df['Intracluster_Stars_Mass'] * 1.0e10 / Hubble_h
     df.loc[:, 'hmass'] = df['Mvir'] * 1.0e10 / Hubble_h
     df.loc[:, 'smass'] = df['Total_Stellar_Mass'] * 1.0e10 / Hubble_h
@@ -156,7 +156,7 @@ def IHS_MassFunction(data_per_file, datasets, property_1, subset_titles, main_ti
         
         handles_2 = [Line2D([], [], color='black', label='Overall')]  # Line for the second histogram dataset
         
-        ax.legend(handles=handles_1 + handles_2, loc='upper right', frameon=False, fontsize='small')
+        ax.legend(handles=handles_1 + handles_2, loc='upper right', frameon=False, fontsize='x-small')
 
     plt.tight_layout()
     save_plot(save_filename)
@@ -184,10 +184,23 @@ def Metallicity(df, property_1, property_2, property_3, titles, save_filename):
         Zobs = -1.492 + 1.847*w - 0.08026*w*w
 
         if 'z = 0.00' in title:
+            Tremonti_x = [8.609833118200260,8.711310621427260,8.815325062234930,8.924413378203950,
+                          9.038575569334320,9.157811635626040,9.282121577079110,9.411505393693530,
+                          9.543426147888620,9.675346902083720,9.807267656278810,9.939188410473910,
+                          10.071109164669000,10.203029918864100,10.334950673059200,10.466871427254300,
+                          10.598792181449400,10.730712935644500,10.862633689839600,10.994554444034700,
+                          11.126475198229800,11.215268013553400]
+            Tremonti_y = [8.453893713634990,8.500077060961780,8.545875777364410,8.591929890811790,
+                          8.638012677468800,8.684156867976300,8.72975155462255,8.774586739271690,
+                          8.817390979855460,8.857467009114060,8.894712519122800,8.929127509881690,
+                          8.960848391956970,8.989602344216140,9.015696290433270,9.038993820042110,
+                          9.059392625117970,9.076995013585530,9.091835088086360,9.103878745978900,
+                          9.11292137141375,9.117603788971350]
             # Conversion from Kroupa IMF to Slapeter IMF to Chabrier IMF
-            ax.plot(np.log10((10**w *1.5 /1.8)), Zobs, 'b', lw=2.0, label='Tremonti et al. 2003')
+            ax.plot(np.log10((10**w *1.5 /1.8)), Zobs, 'b', lw=2.0, label='Tremonti et al. 2004')
+            # ax.scatter(Tremonti_x, Tremonti_y, c='r', label='Tremonti et al. 2004')
 
-        ax.scatter(mass, Z, marker='o', s=1, c='gray', alpha=0.5, label='Model galaxies')
+        ax.scatter(mass, Z, marker='o', s=1, c='gray', alpha=0.5, label='')
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
         ax.set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
         ax.set_xlabel(r'$\log_{10} M_{\mathrm{stellar}}\ (M_{\odot})$')  # and the x-axis labels
@@ -341,7 +354,7 @@ def IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_filena
     leg = plt.legend(loc='upper right', numpoints=1, labelspacing=0.1)
     leg.draw_frame(False)  # Don't want a box frame
     for t in leg.get_texts():  # Reduce the size of the text
-        t.set_fontsize('medium')
+        t.set_fontsize('large')
       
     plt.tight_layout()
     save_plot(save_filename)
@@ -366,6 +379,7 @@ def IHM_hmass(df, property_1, property_2, titles, save_filename):
         ax.set_xlabel(r'$\log_{10} M_{\mathrm{halo}}\ (M_{\odot})$', fontsize=14)
         ax.set_ylabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$', fontsize=14)
         ax.set_xlim(11, 14.5)
+        ax.set_ylim(6, 12.5)
         
         # Manually adding the title in the upper left corner
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
@@ -412,6 +426,7 @@ def IHM_smass(df, property_1, property_2, titles, save_filename):
         ax.set_xlabel(r'$\log_{10} M_{\mathrm{halo}}\ (M_{\odot})$', fontsize=14)
         ax.set_ylabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$', fontsize=14)
         ax.set_xlim(7, 12)
+        ax.set_ylim(6, 12.5)
         
         # Manually adding the title in the upper left corner
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
@@ -434,6 +449,44 @@ def IHM_smass(df, property_1, property_2, titles, save_filename):
         leg.draw_frame(False)  # Don't want a box frame
         for t in leg.get_texts():  # Reduce the size of the text
                 t.set_fontsize('large')
+    
+    plt.tight_layout()
+    save_plot(save_filename)
+
+def Metallicity_all(save_filename):
+
+    csv_files = '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4455.0.csv'
+    titles = 'z = 0.00'
+
+    print('Processing simulation data...', titles)
+    df = pd.read_csv(csv_files)
+    df = df[columns_to_extract_2]
+    df_filtered = df[df['Galaxy_Classification'] == 0]
+    df_diluted = dilute_dataframe(df_filtered, target_rows)
+    df_calculated = perform_calculations_2(df_diluted)
+
+    # Create a 2x2 grid of subplots
+    fig, axs = plt.subplots(2, 2, figsize=(10, 6))
+    
+    axs[0, 0].scatter(np.log10(df_calculated['hmass']),df_calculated['metallicity'],s=1,c='gray')
+    # axs[0, 0].set_title('Plot 1: sin(x)')
+    axs[0, 0].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
+    axs[0, 0].set_xlabel(r'$\log_{10} M_{\mathrm{halo}}\ (M_{\odot})$')  # and the x-axis labels
+    
+    axs[0, 1].scatter(np.log10(df_calculated['smass']),df_calculated['metallicity'],s=1,c='gray')
+    # axs[0, 1].set_title('Plot 2: cos(x)')
+    axs[0, 1].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
+    axs[0, 1].set_xlabel(r'$\log_{10} M_{\mathrm{stellar}}\ (M_{\odot})$')  # and the x-axis labels
+    
+    axs[1, 0].scatter(np.log10(df_calculated['IHM']),df_calculated['metallicity'],s=1,c='gray')
+    # axs[1, 0].set_title('Plot 3: tan(x)')
+    axs[1, 0].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
+    axs[1, 0].set_xlabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$')  # and the x-axis labels
+    
+    axs[1, 1].scatter(df_calculated['IHM_Fraction'],df_calculated['metallicity'],s=1,c='gray')
+    # axs[1, 1].set_title('Plot 4: exp(x)')
+    axs[1, 1].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
+    axs[1, 1].set_xlabel('Intrahalo Stars Fraction')  # and the x-axis labels
     
     plt.tight_layout()
     save_plot(save_filename)
@@ -522,3 +575,4 @@ Metallicity(datasets, 'Total_Stellar_Mass', 'Metals_IntraCluster_Stars_Mass', 'I
 IHM_hmass(datasets, columns_to_extract[0], columns_to_extract[1], titles, 'IHM_vs_hmass.png')
 IHM_smass(datasets, columns_to_extract[2], columns_to_extract[1], titles, 'IHM_vs_smass.png')
 IHMFraction_vs_redshift(datasets2, 'halo_mass', 'IHM_Fraction', titles2, 'IHMFraction_vs_redshift.png')
+Metallicity_all('Metallicity_all.png')

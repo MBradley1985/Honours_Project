@@ -75,7 +75,7 @@ def Metallicity_smass(df, property_1, property_2, property_3, titles, save_filen
         ax.xaxis.set_minor_locator(plt.MultipleLocator(0.05))
         ax.yaxis.set_minor_locator(plt.MultipleLocator(0.25))
             
-        ax.axis([7.5, 12.0, 5.0, 9.5])
+        ax.axis([7.5, 12.0, 7.0, 9.5])
         
         leg = ax.legend(loc='lower right')
         leg.draw_frame(False)  # Don't want a box frame

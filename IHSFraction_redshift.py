@@ -100,12 +100,17 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     mean = np.array(mean_values) * 100
     std = np.array(std_values)
     maxx = np.array(max_values) * 100
+    error_mean = std / np.sqrt(len(mean))
     # print(mean)
     # print(maxx)
-    print(redshifts)
+    # print(redshifts)
+    print(error_mean)
 
     plt.plot(redshifts, mean, c ='r', label = 'SAGE (Millenium) Mean', linestyle = '--')
     plt.plot(redshifts, maxx, c ='r', label = 'SAGE (Millenium) Maximum', linestyle = ':')
+    # plt.errorbar(redshifts, mean, yerr=error_mean, fmt='o', markersize=8, capsize=8, label='Mean ± SEM')
+    plt.fill_between(redshifts, mean - error_mean, mean + error_mean, alpha=0.2, color='b', label='')
+
 
     # Pentagons - Burke, Collins, Stott and Hilton - ICL @ z=1, 2012, 70
     redshifts_1 = [0.9468354430379745, 0.8303797468354429, 0.7949367088607594, 0.8075949367088605,  1.2227848101265821]

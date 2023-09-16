@@ -27,6 +27,10 @@ def perform_calculations(df):
     
     df = df.copy ()
     df.loc[:, 'IHM_Fraction'] = df['Intracluster_Stars_Mass'] / (0.17 * df['Mvir'])  # Modify this calculation as needed
+    df.loc[:, 'metallicity'] = np.log10((df['Metals_IntraCluster_Stars_Mass'] / df['Intracluster_Stars_Mass']) / 0.02) + 9.0
+    df.loc[:, 'IHM'] = df['Intracluster_Stars_Mass'] * 1.0e10 / Hubble_h
+    df.loc[:, 'hmass'] = df['Mvir'] * 1.0e10 / Hubble_h
+    df.loc[:, 'smass'] = df['Total_Stellar_Mass'] * 1.0e10 / Hubble_h
     return df
 
 # Function to save the plot with higher quality
@@ -109,7 +113,7 @@ def Metallicity_hmass(df, property_1, property_2, property_3, titles, save_filen
         Z = np.log10((df[property_2] / df[property_3]) / 0.02) + 9.0
         # print(Z)
 
-        ax.scatter(mass, Z, marker='o', s=1, c='k', alpha=0.5, label='Model galaxies')
+        ax.scatter(mass, Z, marker='o', s=1, c='gray', alpha=0.5, label='Model galaxies')
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
         ax.set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
         ax.set_xlabel(r'$\log_{10} M_{\mathrm{halo}}\ (M_{\odot})$')  # and the x-axis labels
@@ -153,7 +157,7 @@ def Metallicity_ihs(df, property_1, property_2, property_3, titles, save_filenam
         Z = np.log10((df[property_2] / df[property_3]) / 0.02) + 9.0
         # print(Z)
 
-        ax.scatter(mass, Z, marker='o', s=1, c='k', alpha=0.5, label='Model galaxies')
+        ax.scatter(mass, Z, marker='o', s=1, c='gray', alpha=0.5, label='Model galaxies')
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
         ax.set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
         ax.set_xlabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$')  # and the x-axis labels
@@ -196,7 +200,7 @@ def Metallicity_ihsfraction(df, property_1, property_2, property_3, titles, save
         Z = np.log10((df[property_2] / df[property_3]) / 0.02) + 9.0
         # print(Z)
 
-        ax.scatter(mass, Z, marker='o', s=1, c='k', alpha=0.5, label='Model galaxies')
+        ax.scatter(mass, Z, marker='o', s=1, c='gray', alpha=0.5, label='Model galaxies')
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
         ax.set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
         ax.set_xlabel(r'IHS Fraction')  # and the x-axis labels
@@ -221,9 +225,46 @@ def Metallicity_ihsfraction(df, property_1, property_2, property_3, titles, save
     plt.tight_layout()
     save_plot(save_filename)       
 
-import matplotlib.pyplot as plt
-import numpy as np
+def Metallicity_all(save_filename):
 
+    csv_files = '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4455.0.csv'
+    titles = 'z = 0.00'
+
+    print('Processing simulation data...', titles)
+    df = pd.read_csv(csv_files)
+    df = df[columns_to_extract]
+    df_filtered = df[df['Galaxy_Classification'] == 0]
+    df_diluted = dilute_dataframe(df_filtered, target_rows)
+    df_calculated = perform_calculations(df_diluted)
+
+    # Create a 2x2 grid of subplots
+    fig, axs = plt.subplots(2, 2, figsize=(10, 6))
+    
+    axs[0, 0].scatter(np.log10(df_calculated['hmass']),df_calculated['metallicity'],s=1,c='gray',alpha=0.5)
+    # axs[0, 0].set_title('Plot 1: sin(x)')
+    axs[0, 0].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
+    axs[0, 0].set_xlabel(r'$\log_{10} M_{\mathrm{halo}}\ (M_{\odot})$')  # and the x-axis labels
+    
+    axs[0, 1].scatter(np.log10(df_calculated['smass']),df_calculated['metallicity'],s=1,c='gray',alpha=0.5)
+    # axs[0, 1].set_title('Plot 2: cos(x)')
+    w = np.arange(7.0, 13.0, 0.1)
+    Zobs = -1.492 + 1.847*w - 0.08026*w*w
+    axs[0, 1].plot(np.log10((10**w *1.5 /1.8)), Zobs, 'b', lw=2.0, label='Tremonti et al. 2003')
+    axs[0, 1].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
+    axs[0, 1].set_xlabel(r'$\log_{10} M_{\mathrm{stellar}}\ (M_{\odot})$')  # and the x-axis labels
+    
+    axs[1, 0].scatter(np.log10(df_calculated['IHM']),df_calculated['metallicity'],s=1,c='gray',alpha=0.5)
+    # axs[1, 0].set_title('Plot 3: tan(x)')
+    axs[1, 0].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
+    axs[1, 0].set_xlabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$')  # and the x-axis labels
+    
+    axs[1, 1].scatter(df_calculated['IHM_Fraction'],df_calculated['metallicity'],s=1,c='gray',alpha=0.5)
+    # axs[1, 1].set_title('Plot 4: exp(x)')
+    axs[1, 1].set_ylabel(r'$12\ +\ \log_{10}[\mathrm{O/H}]$')  # Set the y...
+    axs[1, 1].set_xlabel('Intrahalo Stars Fraction')  # and the x-axis labels
+    
+    plt.tight_layout()
+    save_plot(save_filename)
 # -------------------------------------------------------------------------
 # -------------------------------------------------------------------------    
 # -------------------------------------------------------------------------
@@ -254,6 +295,7 @@ for idx, filename in enumerate(csv_files):
     datasets.append(df_calculated)
 
 Metallicity_smass(datasets, 'Total_Stellar_Mass', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_smass.png')
-# Metallicity_hmass(datasets, 'Mvir', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_hmass.png')
-# Metallicity_ihs(datasets, 'Intracluster_Stars_Mass', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_ihs.png')
-# Metallicity_ihsfraction(datasets, 'IHM_Fraction', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_ihs.png')
+Metallicity_hmass(datasets, 'Mvir', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_hmass.png')
+Metallicity_ihs(datasets, 'Intracluster_Stars_Mass', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_ihs.png')
+Metallicity_ihsfraction(datasets, 'IHM_Fraction', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_ihsfraction.png')
+Metallicity_all('Metallicity_all.png')

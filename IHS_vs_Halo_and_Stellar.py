@@ -54,6 +54,7 @@ def calculate_statistics(df, property_to_bin, property_to_calculate):
     std_values = []
     median_values = []
     mid_bin_values = []
+    error_mean_values = []
 
     for i in range(len(bin_edges)):
 
@@ -71,11 +72,14 @@ def calculate_statistics(df, property_to_bin, property_to_calculate):
        
        median_bin = np.median(ihstars[w])
        median_values.append(median_bin)
+
+       error_mean = std_bin / np.sqrt(len(ihstars[w]))
+       error_mean_values.append(error_mean)
        
        # print(i, min_bin, max_bin, mean_bin, std_bin) 
         
     
-    return mean_values, std_values, median_values, mid_bin_values
+    return mean_values, std_values, median_values, mid_bin_values, error_mean_values
 
 # -------------------------------------------------------------------------
 
@@ -108,23 +112,26 @@ def plot_IHM_vs_hmass(df, property_1, property_2, titles, save_filename):
         
         ax.set_xlabel(r'$\log_{10} M_{\mathrm{halo}}\ (M_{\odot})$', fontsize=14)
         ax.set_ylabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$', fontsize=14)
-        
+        ax.set_xlim(11, 14.5)
+        ax.set_ylim(6, 12.5)
+
         # Manually adding the title in the upper left corner
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
         
         # Calculate statistics for each bin
-        mean_values, std_values, median_values, mid_bin_values = calculate_statistics(df, property_1, property_2)
+        mean_values, std_values, median_values, mid_bin_values, error_mean_values = calculate_statistics(df, property_1, property_2)
         
         ax.xaxis.set_minor_locator(ticker.FixedLocator(mid_bin_values))
         
         mean_values = np.array(mean_values) 
         std_values = np.array(std_values)
         median_values = np.array(median_values)
+        error_mean_values = np.array(error_mean_values)
         
         ax.plot(mid_bin_values, mean_values, color='blue', label='Mean')
         ax.plot(mid_bin_values, median_values, color='green', label='Median', linestyle = '--')
         ax.fill_between(mid_bin_values, (mean_values-std_values), (mean_values+std_values), color='orange', alpha=0.3, label=r'1$\sigma$ Std. Dev.')
-        
+        ax.fill_between(mid_bin_values, (mean_values-error_mean_values), (mean_values+error_mean_values), color='red', alpha=0.3, label=r'Error in mean')
 
         # Create a custom legend with larger symbols
         leg = ax.legend(loc='lower right', numpoints=1, labelspacing=0.1)
@@ -160,23 +167,27 @@ def plot_IHM_vs_smass(df, property_1, property_2, titles, save_filename):
         
         ax.set_xlabel(r'$\log_{10} M_{\mathrm{stellar}}\ (M_{\odot})$', fontsize=14)
         ax.set_ylabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$', fontsize=14)
-        
+        ax.set_xlim(7, 12)
+        ax.set_ylim(6, 12.5)
+
         # Manually adding the title in the upper left corner
         ax.text(0.05, 0.95, title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
         
         # Calculate statistics for each bin
-        mean_values, std_values, median_values, mid_bin_values = calculate_statistics(df, property_1, property_2)
+        mean_values, std_values, median_values, mid_bin_values, error_mean_values = calculate_statistics(df, property_1, property_2)
         
         ax.xaxis.set_minor_locator(ticker.FixedLocator(mid_bin_values))
         
         mean_values = np.array(mean_values) 
         std_values = np.array(std_values)
         median_values = np.array(median_values)
-        
+        error_mean_values = np.array(error_mean_values)
+
         ax.plot(mid_bin_values, mean_values, color='blue', label='Mean')
         ax.plot(mid_bin_values, median_values, color='green', label='Median', linestyle = '--')
         ax.fill_between(mid_bin_values, (mean_values-std_values), (mean_values+std_values), color='orange', alpha=0.3, label=r'1$\sigma$ Std. Dev.')
-        
+        ax.fill_between(mid_bin_values, (mean_values-error_mean_values), (mean_values+error_mean_values), color='red', alpha=0.3, label=r'Error in mean')
+
         # Create a custom legend with larger symbols
         leg = ax.legend(loc='lower right', numpoints=1, labelspacing=0.1)
         leg.draw_frame(False)  # Don't want a box frame
@@ -199,13 +210,14 @@ def plot_IHM_vs_smass(df, property_1, property_2, titles, save_filename):
 
 # List of CSV files to process along with corresponding titles
 csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4404.0.csv',
+            '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4456.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4420.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4422.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4423.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4424.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4425.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4426.0.csv']  # Add your CSV filenames here
-titles = ['z = 0.00', 'z = 1.0', 'z = 2.07', 'z = 4.17', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
+titles = ['z = 0.00', 'z = 0.508', 'z = 1.0', 'z = 2.07', 'z = 4.17', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
 
 # Initialize lists to store DataFrames for old and new datasets
 datasets = []

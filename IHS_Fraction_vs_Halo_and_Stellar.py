@@ -254,13 +254,14 @@ def plot_IHMFraction_vs_smass_single(df_list, property_1, property_2, titles, sa
 
 # List of CSV files to process along with corresponding titles
 csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4404.0.csv',
+            '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4456.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4420.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4422.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4423.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4424.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4425.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4426.0.csv']  # Add your CSV filenames here
-titles = ['z = 0.00', 'z = 1.0', 'z = 2.07', 'z = 4.17', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
+titles = ['z = 0.00', 'z = 0.508', 'z = 1.0', 'z = 2.07', 'z = 4.17', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
 
 
 # Initialize lists to store DataFrames for old and new datasets

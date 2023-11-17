@@ -106,8 +106,8 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     # print(redshifts)
     print(error_mean)
 
-    plt.plot(redshifts, mean, c ='r', label = 'SAGE (Millenium) Mean', linestyle = '--')
-    plt.plot(redshifts, maxx, c ='r', label = 'SAGE (Millenium) Maximum', linestyle = ':')
+    plt.plot(redshifts, mean, c ='r', label = 'SAGE (Millennium) Mean', linestyle = '--')
+    plt.plot(redshifts, maxx, c ='r', label = 'SAGE (Millennium) Maximum', linestyle = ':')
     # plt.errorbar(redshifts, mean, yerr=error_mean, fmt='o', markersize=8, capsize=8, label='Mean ± SEM')
     plt.fill_between(redshifts, mean - error_mean, mean + error_mean, alpha=0.2, color='b', label='')
 
@@ -194,7 +194,7 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     plt.scatter(redshifts_2, ihs_fraction_2, marker = 'o', color = 'gray', edgecolors='black', s = 100)
     plt.scatter(redshifts_3, ihs_fraction_3, marker = 's', color = 'gray', edgecolors='black', s = 100)
     plt.scatter(redshifts_4, ihs_fraction_4, marker = 'X', color = 'gray', edgecolors='black', s = 100)
-    plt.plot(redshifts_5, ihs_fraction_5, linestyle = '--', color = 'plum')
+    plt.plot(redshifts_5, ihs_fraction_5, linestyle = '--', color = 'plum', label = 'Rudick et al., 2011')
     # plt.fill_between(redshifts_5, ihs_fraction_5_upper, ihs_fraction_5_lower, color='purple', alpha=0.3)
     plt.scatter(redshifts_6, ihs_fraction_6, marker = 'v', color = 'gray', edgecolors='black', s = 100)
     plt.scatter(redshifts_7, ihs_fraction_7, marker = 'o', color = 'k', edgecolors='gray', s = 100)

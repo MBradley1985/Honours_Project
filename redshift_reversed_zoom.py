@@ -57,7 +57,7 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
         ihs = ihs_frac[w]
         ihs_perc = ihs * 100
         w1 = np.where(ihs_perc <= 2)[0]
-        w2 = np.where(ihs_perc <= 0.5)[0]
+        w2 = np.where(ihs_perc <= 1)[0]
         ihs_non_1 = ihs_perc[w2]
         ihs_non_2 = ihs_perc[w1]
         ihs_non_perc_1 = ((len(ihs_non_1)) / (len(hmass))) * 100
@@ -70,8 +70,8 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     ihs_non_perc1 = ihs_non_percent1
     ihs_non_perc2 = ihs_non_percent2
 
-    plt.plot(redshifts, ihs_non_perc1, label = 'Intrahalo stars fraction < 0.5%', c = 'r', zorder = 10)
-    plt.plot(redshifts, ihs_non_perc2, label = 'Intrahalo stars fraction < 2%', c = 'b', zorder = 9)
+    plt.plot(redshifts, ihs_non_perc1, label = 'Intrahalo stars fraction < 1%',  zorder = 10)
+    plt.plot(redshifts, ihs_non_perc2, label = 'Intrahalo stars fraction < 2%', zorder = 9)
     
     plt.xlim(0, 0.28)
     plt.xlabel('Redshift')

@@ -189,6 +189,19 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
      # Black Side Triangle - Spavone et al., Fornax Deep Survey, 2020, 76
     redshifts_13 = [0]
     ihs_fraction_13 = [34.08018867924528]
+     # Blue Tang et al., hydrodynamical simulation
+    ihs_fraction_14 = [22.675736961451200,21.995464852607700,20.975056689342400,
+                       19.954648526077100,18.934240362811800,18.140589569161000,
+                       17.006802721088400,16.099773242630400,15.532879818594100,
+                       14.625850340136000,13.718820861678000,13.151927437641700,
+                       12.131519274376400,10.997732426303800,9.523809523809520,
+                       8.73015873015872,7.596371882086170,6.68934240362811]
+    redshifts_14 = [0.1021897810218980,0.12408759124087600,0.13625304136253000,
+                       0.15571776155717800,0.1800486618004870,0.2068126520681270,
+                       0.22871046228710500,0.25304136253041400,0.2700729927007300,
+                       0.291970802919708,0.3187347931873480,0.34063260340632600,
+                       0.3673965936739660,0.3917274939172750,0.42092457420924600,
+                       0.44282238442822400,0.45985401459854000,0.4841849148418490]
 
     plt.scatter(redshifts_1, ihs_fraction_1, marker = 'p', color = 'gray', edgecolors='black', s = 100)
     plt.scatter(redshifts_2, ihs_fraction_2, marker = 'o', color = 'gray', edgecolors='black', s = 100)
@@ -204,6 +217,8 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     plt.scatter(redshifts_11, ihs_fraction_11, marker = '^', color = 'gray', edgecolors='black', s = 100)
     plt.scatter(redshifts_12, ihs_fraction_12, marker = '^', color = 'k', edgecolors='gray', s = 100)
     plt.scatter(redshifts_13, ihs_fraction_13, marker = '<', color = 'k', edgecolors='gray', s = 100)
+    plt.plot(redshifts_14, ihs_fraction_14, linestyle = '--', color = 'royalblue', label = 'Tang et al., 2018')
+
 
     plt.xlim(0, 2.1)
     plt.xlabel('Redshift')
@@ -422,6 +437,19 @@ def plot_IHMFraction_vs_redshift2(df_list, property_1, property_2, titles, save_
      # Black Side Triangle - Spavone et al., Fornax Deep Survey, 2020, 76
     redshifts_13 = [0]
     ihs_fraction_13 = [34.08018867924528]
+    # Blue Tang et al., hydrodynamical simulation
+    ihs_fraction_14 = [22.675736961451200,21.995464852607700,20.975056689342400,
+                       19.954648526077100,18.934240362811800,18.140589569161000,
+                       17.006802721088400,16.099773242630400,15.532879818594100,
+                       14.625850340136000,13.718820861678000,13.151927437641700,
+                       12.131519274376400,10.997732426303800,9.523809523809520,
+                       8.73015873015872,7.596371882086170,6.68934240362811]
+    redshifts_14 = [0.1021897810218980,0.12408759124087600,0.13625304136253000,
+                       0.15571776155717800,0.1800486618004870,0.2068126520681270,
+                       0.22871046228710500,0.25304136253041400,0.2700729927007300,
+                       0.291970802919708,0.3187347931873480,0.34063260340632600,
+                       0.3673965936739660,0.3917274939172750,0.42092457420924600,
+                       0.44282238442822400,0.45985401459854000,0.4841849148418490]
 
     # plt.scatter(redshifts_1, ihs_fraction_1, marker = 'p', color = 'gray', edgecolors='black', s = 100)
     # plt.scatter(redshifts_2, ihs_fraction_2, marker = 'o', color = 'gray', edgecolors='black', s = 100)
@@ -437,6 +465,7 @@ def plot_IHMFraction_vs_redshift2(df_list, property_1, property_2, titles, save_
     # plt.scatter(redshifts_11, ihs_fraction_11, marker = '^', color = 'gray', edgecolors='black', s = 100)
     # plt.scatter(redshifts_12, ihs_fraction_12, marker = '^', color = 'k', edgecolors='gray', s = 100)
     # plt.scatter(redshifts_13, ihs_fraction_13, marker = '<', color = 'k', edgecolors='gray', s = 100)
+    plt.plot(redshifts_14, ihs_fraction_14, linestyle = '--', color = 'royalblue', label = 'Tang et al., 2018')
 
     plt.xlim(0, 2.1)
     plt.xlabel('Redshift')

@@ -222,7 +222,7 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
 
     plt.xlim(0, 2.1)
     plt.xlabel('Redshift')
-    plt.ylabel('Intrahalo Stars %')
+    plt.ylabel('Intrahalo stellar mass fraction (%)')
 
     # Create a custom legend with larger symbols
     leg = plt.legend(loc='upper right', numpoints=1, labelspacing=0.1)
@@ -469,7 +469,7 @@ def plot_IHMFraction_vs_redshift2(df_list, property_1, property_2, titles, save_
 
     plt.xlim(0, 2.1)
     plt.xlabel('Redshift')
-    plt.ylabel('Intrahalo Stars %')
+    plt.ylabel('Intrahalo stellar mass fraction (%)')
 
     # Create a custom legend with larger symbols
     leg = plt.legend(loc='upper right', numpoints=1, labelspacing=0.1)

@@ -9,7 +9,7 @@ np.seterr(divide='ignore')
 
 # Define the columns you want to extract and the target number of rows
 columns_to_extract = ['Mvir', 'Intracluster_Stars_Mass', 'Total_Stellar_Mass', 'Galaxy_Classification']  # Change to your desired column names
-target_rows = 750000
+target_rows = 200000
 Hubble_h = 0.73
 # -------------------------------------------------------------------------
 
@@ -64,14 +64,15 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     fraction = ihsmf
     hmass_ = haloes
 
-    plt.scatter(hmass_[0],fraction[0], s=1, alpha=0.8, c='b', label='z = 0.00')
-    plt.scatter(hmass_[1],fraction[1], s=1, alpha=0.6, c='mediumblue', label='z = 0.0199')
-    plt.scatter(hmass_[2],fraction[2], s=1, alpha=0.6, c='blueviolet', label='z = 0.0414')
-    plt.scatter(hmass_[3],fraction[3], s=1, alpha=0.6, c='darkviolet', label='z = 0.0645')
-    plt.scatter(hmass_[4],fraction[4], s=1, alpha=0.6, c='fuchsia', label='z = 0.0893')
-    plt.scatter(hmass_[4],fraction[4], s=1, alpha=0.4, c='crimson', label='z = 0.1159')
+    plt.scatter(hmass_[0],fraction[0], alpha=0.7, c='white', edgecolors='black', s = 70, marker = 'h')
+    # plt.scatter(hmass_[1],fraction[1], s=1, alpha=0.6, c='k', label='z = 0.0199')
+    # plt.scatter(hmass_[2],fraction[2], s=1, alpha=0.6, c='k', label='z = 0.0414')
+    # plt.scatter(hmass_[3],fraction[3], s=1, alpha=0.6, c='k', label='z = 0.0645')
+    # plt.scatter(hmass_[4],fraction[4], s=1, alpha=0.6, c='k', label='z = 0.0893')
+    # plt.scatter(hmass_[4],fraction[4], s=1, alpha=0.4, c='k', label='z = 0.1159')
     
-    plt.xlim(14,15.5)
+    plt.xlim(14,15.2)
+    plt.ylim(0, 20)
     plt.xlabel(r'$\log_{10} M_{\mathrm{halo}}\ (M_{\odot})$')
     plt.ylabel('Intrahalo stellar mass fraction (%)')
 

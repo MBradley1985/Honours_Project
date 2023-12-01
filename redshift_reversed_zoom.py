@@ -119,9 +119,9 @@ def plot_IHMFraction_vs_redshift_2(df_list, property_1, property_2, titles, save
         ihs3 = ihs_frac[c]
         ihs_perc3 = ihs3 * 100
 
-        w = np.where(ihs_perc <= 2)[0]
-        w2 = np.where(ihs_perc2 <= 2)[0]
-        w3 = np.where(ihs_perc3 <= 2)[0]
+        w = np.where(ihs_perc >= 4)[0]
+        w2 = np.where(ihs_perc2 >= 4)[0]
+        w3 = np.where(ihs_perc3 >= 4)[0]
         
         ihs_non_1 = ihs_perc[w]
         ihs_non_perc_1 = ((len(ihs_non_1)) / (len(hmass))) * 100
@@ -151,7 +151,7 @@ def plot_IHMFraction_vs_redshift_2(df_list, property_1, property_2, titles, save
     
     plt.xlim(0, 0.28)
     plt.xlabel('Redshift')
-    plt.ylabel('Percent with a negligible IHM fraction')
+    plt.ylabel('Percent with measurable IHM fractions')
 
     # Create a custom legend with larger symbols
     leg = plt.legend(loc='upper right', numpoints=1, labelspacing=0.1)
@@ -178,8 +178,7 @@ csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4404.0.
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4410.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4411.0.csv',]  # Add your CSV filenames here
 titles = ['z = 0.00', 'z = 0.0199', 'z = 0.0414', 'z = 0.0645', 'z = 0.0893', 'z = 0.1159',
-           'z = 0.1749', 'z = 0.2075',
-            'z = 0.2798']  # Add corresponding titles
+           'z = 0.1749', 'z = 0.2075', 'z = 0.2798']  # Add corresponding titles
 
 datasets = []
 
@@ -191,8 +190,8 @@ for idx, filename in enumerate(csv_files):
     df_calculated = perform_calculations(df_filtered)
     datasets.append(df_calculated)
 
-print('Intrahalo mass fraction vs. Redshift')
-plot_IHMFraction_vs_redshift(datasets, 'halo_mass', 'IHM_Fraction', titles, 'Neg_IHM_Fraction_zoom.png')
+# print('Intrahalo mass fraction vs. Redshift')
+# plot_IHMFraction_vs_redshift(datasets, 'halo_mass', 'IHM_Fraction', titles, 'Neg_IHM_Fraction_zoom.png')
 
 print('Intrahalo mass fraction vs. Redshift')
 plot_IHMFraction_vs_redshift_2(datasets, 'halo_mass', 'IHM_Fraction', titles, 'Neg_IHM_Fraction_zoom_mass.png')

@@ -46,7 +46,7 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     colors = plt.cm.RdYlBu_r(np.linspace(0, 1, len(df_list)))
     redshifts = [0.00, 0.0199, 0.0414, 0.0645, 0.0893, 0.1159, 0.1749, 0.2075, 0.2798, 0.3197, 
                  0.4079, 0.5086, 0.5642, 0.6235, 0.6871, 0.7550, 0.827, 0.905, 1.077, 1.1734, 1.2758, 1.3857,
-                   1.503, 1.6302, 1.766, 1.9126, 2.07]
+                   1.503, 1.6302, 1.766, 1.9126, 2.07, 4.17, 6.19, 8.54, 10.07]
     # ihs_non_values = []
     ihs_non_percent1 = []
     ihs_non_percent2 = []
@@ -63,8 +63,17 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
         w2 = np.where(ihs_perc <= 1)[0]
         ihs_non_1 = ihs_perc[w2]
         ihs_non_2 = ihs_perc[w1]
-        ihs_non_perc_1 = ((len(ihs_non_1)) / (len(hmass))) * 100
-        ihs_non_perc_2 = ((len(ihs_non_2)) / (len(hmass))) * 100
+
+        # Check if len(hmass) is greater than 0 before calculating percentages
+        if len(hmass) > 0:
+            ihs_non_perc_1 = ((len(ihs_non_1)) / (len(hmass))) * 100
+            ihs_non_perc_2 = ((len(ihs_non_2)) / (len(hmass))) * 100
+        else:
+            # Set default values or take appropriate action when len(hmass) is 0
+            ihs_non_perc_1 = 0
+            ihs_non_perc_2 = 0
+        # ihs_non_perc_1 = ((len(ihs_non_1)) / (len(hmass))) * 100
+        # ihs_non_perc_2 = ((len(ihs_non_2)) / (len(hmass))) * 100
         # print(ihs_non_perc_1)
         # print(len(ihs_non_1))
         # print(len(hmass))
@@ -85,8 +94,9 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
     # print(redshifts)
     # print(error_mean)
 
-    plt.plot(redshifts, ihs_non_perc1, label = 'Intrahalo stars fraction < 1%')
-    plt.plot(redshifts, ihs_non_perc2, label = 'Intrahalo stars fraction < 2%')
+    plt.plot(redshifts, ihs_non_perc2, label = 'Intrahalo stars fraction < 2%', c='b')
+    plt.plot(redshifts, ihs_non_perc1, label = 'Intrahalo stars fraction < 1%', c='r')
+    # plt.plot(redshifts, ihs_non_perc2, label = 'Intrahalo stars fraction < 2%')
     # plt.plot(redshifts, ihs_non_perc3, label = 'Intrahalo stars fraction < 3%')
     
     plt.xlim(0, 2.1)
@@ -110,7 +120,7 @@ def plot_IHMFraction_vs_redshift_2(df_list, property_1, property_2, titles, save
     colors = plt.cm.RdYlBu_r(np.linspace(0, 1, len(df_list)))
     redshifts = [0.00, 0.0199, 0.0414, 0.0645, 0.0893, 0.1159, 0.1749, 0.2075, 0.2798, 0.3197, 
                  0.4079, 0.5086, 0.5642, 0.6235, 0.6871, 0.7550, 0.827, 0.905, 1.077, 1.1734, 1.2758, 1.3857,
-                   1.503, 1.6302, 1.766, 1.9126, 2.07]
+                   1.503, 1.6302, 1.766, 1.9126, 2.07, 4.17, 6.19, 8.54, 10.07]
     ihs_non_percent1 = []
     ihs_non_percent2 = []
     ihs_non_percent3 = []
@@ -137,20 +147,28 @@ def plot_IHMFraction_vs_redshift_2(df_list, property_1, property_2, titles, save
         ihs3 = ihs_frac[c]
         ihs_perc3 = ihs3 * 100
 
-        w = np.where(ihs_perc <= 2)[0]
-        w2 = np.where(ihs_perc2 <= 2)[0]
-        w3 = np.where(ihs_perc3 <= 2)[0]
+        w = np.where(ihs_perc >= 2)[0]
+        w2 = np.where(ihs_perc2 >= 2)[0]
+        w3 = np.where(ihs_perc3 >= 2)[0]
         
         ihs_non_1 = ihs_perc[w]
         ihs_non_perc_1 = ((len(ihs_non_1)) / (len(hmass))) * 100
         ihs_non_percent1.append(ihs_non_perc_1)
+        print(len(hmass))
+        print(len(ihs_non_1))
+        print(ihs_non_perc_1)
 
         ihs_non_2 = ihs_perc2[w2]
         ihs_non_perc_2 = ((len(ihs_non_2)) / (len(hmass2))) * 100
         ihs_non_percent2.append(ihs_non_perc_2)
 
         ihs_non_3 = ihs_perc3[w3]
-        ihs_non_perc_3 = ((len(ihs_non_3)) / (len(hmass3))) * 100
+        # Check if len_hmass3 is not zero before performing division
+        if len(hmass3) != 0:
+            ihs_non_perc_3 = (len(ihs_non_3) / len(hmass3)) * 100
+        else:
+            ihs_non_perc_3 = 0  # Set to zero or handle it in a way that makes sense
+
         ihs_non_percent3.append(ihs_non_perc_3)
 
     # ihs_non = ihs_non_values
@@ -165,8 +183,9 @@ def plot_IHMFraction_vs_redshift_2(df_list, property_1, property_2, titles, save
 
     
     plt.xlim(0, 2.1)
+    plt.ylim(30, 100)
     plt.xlabel('Redshift')
-    plt.ylabel('Percent with a negligible IHM fraction')
+    plt.ylabel('Percent with at least 2% intrahalo stars')
 
     # Create a custom legend with larger symbols
     leg = plt.legend(loc='upper right', numpoints=1, labelspacing=0.1)
@@ -208,11 +227,15 @@ csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4404.0.
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4433.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4434.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4435.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4422.0.csv']  # Add your CSV filenames here
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4422.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4423.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4424.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4425.0.csv',
+             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4426.0.csv']  # Add your CSV filenames here
 titles = ['z = 0.00', 'z = 0.0199', 'z = 0.0414', 'z = 0.0645', 'z = 0.0893', 'z = 0.1159', 'z = 0.1749', 'z = 0.2075',
             'z = 0.2798', 'z = 0.3197', 'z = 0.4079', 'z = 0.5086', 'z = 0.5642', 'z = 0.6235',
               'z = 0.6871', 'z = 0.7550', 'z = 0.827', 'z = 0.905', 'z = 1.077', 'z = 1.1734', 'z = 1.2758', 'z = 1.3857',
-                'z = 1.503', 'z = 1.6302', 'z = 1.766', 'z = 1.9126', 'z = 2.07']  # Add corresponding titles
+                'z = 1.503', 'z = 1.6302', 'z = 1.766', 'z = 1.9126', 'z = 2.07', 'z = 4.17', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
 
 datasets = []
 
@@ -224,8 +247,8 @@ for idx, filename in enumerate(csv_files):
     df_calculated = perform_calculations(df_filtered)
     datasets.append(df_calculated)
 
-print('Intrahalo mass fraction vs. Redshift')
-plot_IHMFraction_vs_redshift(datasets, 'halo_mass', 'IHM_Fraction', titles, 'Neg_IHM_Fraction.png')
+# print('Intrahalo mass fraction vs. Redshift')
+# plot_IHMFraction_vs_redshift(datasets, 'halo_mass', 'IHM_Fraction', titles, 'Neg_IHM_Fraction.png')
 
 print('Intrahalo mass fraction vs. Redshift')
-plot_IHMFraction_vs_redshift_2(datasets, 'halo_mass', 'IHM_Fraction', titles, 'Neg_IHM_Fraction_mass.png')
+plot_IHMFraction_vs_redshift_2(datasets, 'halo_mass', 'IHM_Fraction', titles, 'Pos_IHM_Fraction_mass.png')

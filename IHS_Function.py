@@ -88,7 +88,7 @@ def process_subsets(data_per_file, datasets, property_1, subset_titles, main_tit
         
         handles_2 = [Line2D([], [], color='black', label='Overall')]  # Line for the second histogram dataset
         
-        ax.legend(handles=handles_1 + handles_2, loc='upper right', frameon=False, fontsize='small')
+        ax.legend(handles=handles_1 + handles_2, loc='upper right', frameon=False, fontsize='medium')
 
     # Hide unused subplots
     for file_idx in range(num_files, rows * cols):

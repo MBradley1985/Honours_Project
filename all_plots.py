@@ -126,7 +126,7 @@ def IHS_MassFunction(data_per_file, datasets, property_1, subset_titles, main_ti
                  r'$10^{13.5} < M_{\mathrm{halo}}$']  # List of custom legend labels for the three bins
 
     
-    fig, axes = plt.subplots(rows, cols, figsize=(12, 18))
+    fig, axes = plt.subplots(4, 2, figsize=(12, 18))
     
     custom_lines = []  # For creating a custom legend
     
@@ -149,14 +149,24 @@ def IHS_MassFunction(data_per_file, datasets, property_1, subset_titles, main_ti
         
         ax.set_yscale('log')
         ax.text(0.05, 0.95, main_title, transform=ax.transAxes, fontsize=14, va='top', ha='left')
-        ax.set_ylabel(r'$\phi\ (\mathrm{Mpc}^{-3}\ \mathrm{dex}^{-1})$')
+        
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{int(np.log10(x)):d}"))
+
+
+        ax.set_ylabel(r'$\log_{10}\phi\ (\mathrm{Mpc}^{-3}\ \mathrm{dex}^{-1})$')
         ax.set_xlabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$')
 
         handles_1 = custom_lines[:3]  # Assuming the first three lines correspond to your custom legend labels
         
         handles_2 = [Line2D([], [], color='black', label='Overall')]  # Line for the second histogram dataset
         
-        ax.legend(handles=handles_1 + handles_2, loc='upper right', frameon=False, fontsize='x-small')
+        ax.legend(handles=handles_1 + handles_2, loc='upper right', frameon=False, fontsize='medium')
+
+    # # Hide unused subplots
+    # for file_idx in range(num_files, rows * cols):
+    #     row = file_idx // cols
+    #     col = file_idx % cols
+    #     axes[row, col].axis('off')
 
     plt.tight_layout()
     save_plot(save_filename)
@@ -168,7 +178,7 @@ def Metallicity(df, property_1, property_2, property_3, titles, save_filename):
     num_cols = 2
     num_rows = (num_plots + num_cols - 1) // num_cols
     
-    fig, axs = plt.subplots(num_rows, num_cols, figsize=(12, 18))
+    fig, axs = plt.subplots(num_rows, num_cols)
     plt.subplots_adjust(wspace=0.3, hspace=0.4)
     
     for idx, (df, title) in enumerate(zip(df, titles)):
@@ -500,14 +510,14 @@ csv_files = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4456.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4457.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4459.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4460.0.csv',
+             
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4461.0.csv',
-             '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4462.0.csv',
+             
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4463.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4464.0.csv',
              '/Users/michaelbradley/Documents/Honours/TAO/Small_sims_metallicity/tao.4465.0.csv']  # Add your CSV filenames here
-titles = ['z = 0.00', 'z = 0.508', 'z = 1.0', 'z = 2.07', 'z = 3.06', 'z = 4.17', 'z = 5.288', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
-titles_sub = ['z = 0.00', 'z = 0.508', 'z = 1.0', 'z = 2.07', 'z = 3.06', 'z = 4.17', 'z = 5.288', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
+titles = ['z = 0.00', 'z = 0.508', 'z = 1.0', 'z = 2.07', 'z = 4.17', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
+titles_sub = ['z = 0.00', 'z = 0.508', 'z = 1.0', 'z = 2.07', 'z = 4.17', 'z = 6.19', 'z = 8.54', 'z = 10.07']  # Add corresponding titles
 
 # List of CSV files to process along with corresponding titles
 csv_files2 = ['/Users/michaelbradley/Documents/Honours/TAO/Small_sims/tao.4404.0.csv',
@@ -562,17 +572,17 @@ for idx, filename in enumerate(csv_files):
     mass_range_arrays = [np.array(data) for data in mass_range_data]
     grouped_data_per_file.append(mass_range_arrays)
 
-for idx, filename in enumerate(csv_files2):
-    print('Processing simulation data...', titles2[idx])
-    df = pd.read_csv(filename)
-    df = df[columns_to_extract]
-    df_filtered = df[df['Galaxy_Classification'] == 0]
-    df_calculated = perform_calculations(df_filtered)
-    datasets2.append(df_calculated)
+# for idx, filename in enumerate(csv_files2):
+#     print('Processing simulation data...', titles2[idx])
+#     df = pd.read_csv(filename)
+#     df = df[columns_to_extract]
+#     df_filtered = df[df['Galaxy_Classification'] == 0]
+#     df_calculated = perform_calculations(df_filtered)
+#     datasets2.append(df_calculated)
 
 IHS_MassFunction(grouped_data_per_file, datasets, columns_to_extract[1], titles_sub, titles, 5, 2, 'IHMfunction.png')
-Metallicity(datasets, 'Total_Stellar_Mass', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_smass.png')
-IHM_hmass(datasets, columns_to_extract[0], columns_to_extract[1], titles, 'IHM_vs_hmass.png')
-IHM_smass(datasets, columns_to_extract[2], columns_to_extract[1], titles, 'IHM_vs_smass.png')
-IHMFraction_vs_redshift(datasets2, 'halo_mass', 'IHM_Fraction', titles2, 'IHMFraction_vs_redshift.png')
-Metallicity_all('Metallicity_all.png')
+# Metallicity(datasets, 'Total_Stellar_Mass', 'Metals_IntraCluster_Stars_Mass', 'Intracluster_Stars_Mass', titles, 'Metallicity_smass.png')
+# IHM_hmass(datasets, columns_to_extract[0], columns_to_extract[1], titles, 'IHM_vs_hmass.png')
+# IHM_smass(datasets, columns_to_extract[2], columns_to_extract[1], titles, 'IHM_vs_smass.png')
+# IHMFraction_vs_redshift(datasets2, 'halo_mass', 'IHM_Fraction', titles2, 'IHMFraction_vs_redshift.png')
+# Metallicity_all('Metallicity_all.png')

@@ -164,7 +164,7 @@ def plot_IHM_vs_smass(df, property_1, property_2, titles, save_filename):
         
         ax.set_xlabel(r'$\log_{10} M_{\mathrm{stellar}}\ (M_{\odot})$', fontsize=14)
         ax.set_ylabel(r'$\log_{10} M_{\mathrm{IHS}}\ (M_{\odot})$', fontsize=14)
-        ax.set_xlim(7, 12)
+        ax.set_xlim(8, 12)
         ax.set_ylim(6, 12.5)
 
         # Manually adding the title in the upper left corner

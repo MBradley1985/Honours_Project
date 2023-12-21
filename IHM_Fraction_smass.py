@@ -27,7 +27,7 @@ def dilute_dataframe(df, target_rows):
 def perform_calculations(df):
     
     df = df.copy ()
-    df.loc[:, 'IHM_Fraction'] = df['Intracluster_Stars_Mass'] / (0.17 * df['Mvir'])  # Modify this calculation as needed
+    df.loc[:, 'IHM_Fraction'] = (df['Intracluster_Stars_Mass'] / (0.17 * df['Mvir']))*100  # Modify this calculation as needed
     df.loc[:, 'IHM'] = df['Intracluster_Stars_Mass'] * 1.0e10 / Hubble_h
     df.loc[:, 'hmass'] = df['Mvir'] * 1.0e10 / Hubble_h
     df.loc[:, 'smass'] = df['Total_Stellar_Mass'] * 1.0e10 / Hubble_h
@@ -111,8 +111,8 @@ def plot_IHMFraction_vs_smass(df, property_1, property_2, titles, save_filename)
         
         Scatter_Plot([df], property_1, property_2, [title], ax)
         
-        ax.set_xlabel(r'$\log_{10} M_{\mathrm{halo}}\ (M_{\odot})$')
-        ax.set_ylabel(r'$F_{\mathrm{IHS}}\ (M_{\odot}) \left(\frac{M_{\mathrm{IHS}}}{M_{\mathrm{halo}}} \times f_{\mathrm{cosmic\ baryons}}\right)$')
+        ax.set_xlabel(r'$\log_{10} M_{\mathrm{stellar}}\ (M_{\odot})$')
+        ax.set_ylabel(r'Intrahalo stellar mass fraction (%)')
         # ax.set_yscale('log')
         
         # Manually adding the title in the upper left corner
@@ -131,6 +131,9 @@ def plot_IHMFraction_vs_smass(df, property_1, property_2, titles, save_filename)
         ax.plot(mid_bin_values, median_values, color='green', label='Median', linestyle = '--')
         ax.fill_between(mid_bin_values, (mean_values-std_values), (mean_values+std_values), color='orange', alpha=0.3, label=r'1$\sigma$ Std. Dev.')
         ax.fill_between(mid_bin_values, (mean_values-error_mean_values), (mean_values+error_mean_values), color='red', alpha=0.3, label=r'Error in mean')
+
+        ax.set_xlim(8,12)
+        ax.set_ylim(-4, 29)
         
         # Create a custom legend with larger symbols
         leg = ax.legend(loc='upper right', numpoints=1, labelspacing=0.1)
@@ -220,4 +223,4 @@ for idx, filename in enumerate(csv_files):
 print('Intrahalo mass fraction vs. Halo mass')
 plot_IHMFraction_vs_smass(datasets, 'smass', 'IHM_Fraction', titles, 'IHMFraction_vs_smass_grid.png')
 
-IHM_Fraction('IHM_Fraction__smass_z0.png')
+# IHM_Fraction('IHM_Fraction__smass_z0.png')

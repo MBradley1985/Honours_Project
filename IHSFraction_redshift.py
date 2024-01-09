@@ -87,6 +87,7 @@ def plot_IHMFraction_vs_redshift(df_list, property_1, property_2, titles, save_f
         w = np.where((halo >= 14) & (ihs_frac > 0))[0]
         hmass = halo[w]
         ihs = ihs_frac[w]
+        print(len(hmass))
         # mean_values = []
         
         mean = np.mean(ihs)
